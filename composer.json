@@ -1,0 +1,50 @@
+{
+	"name": "fisharebest/laravel-assets",
+	"description": "Asset management for Laravel",
+	"keywords": [
+		"laravel",
+		"asset",
+		"assets",
+		"css",
+		"js",
+		"minify",
+		"pipeline"
+	],
+	"license": "GPL-3.0",
+	"authors": [
+		{
+			"name": "Greg Roach",
+			"email": "fisharebest@gmail.com"
+		}
+	],
+	"require": {
+		"illuminate/console": "~5.0",
+		"illuminate/support": "~5.0",
+		"league/flysystem": "~1.0",
+		"mrclay/minify": "~2.0"
+	},
+	"require-dev": {
+		"league/flysystem-memory": "~1.0",
+		"mockery/mockery": "~0.9",
+		"phpunit/phpunit": "~4.0",
+		"satooshi/php-coveralls": "dev-master"
+	},
+	"autoload": {
+		"psr-4": {
+			"Fisharebest\\LaravelAssets\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Fisharebest\\LaravelAssets\\Tests\\": "tests/"
+		},
+		"files": [
+			"tests/shims.php"
+		]
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0-dev"
+		}
+	}
+}
