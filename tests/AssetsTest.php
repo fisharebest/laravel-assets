@@ -298,4 +298,41 @@ class AssetsTest extends TestCase {
 		$this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
 		$this->assertTrue($filesystem->has($matches[1][0]));
 	}
+
+	/**
+	 * Test adding and rendering assets.
+	 *
+	 * @covers Fisharebest\LaravelAssets\Assets::add
+	 * @covers Fisharebest\LaravelAssets\Assets::css
+	 * @covers Fisharebest\LaravelAssets\Assets::js
+	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers Fisharebest\LaravelAssets\Assets::hash
+	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 */
+	public function testRepeatable() {
+		$filesystem = new Filesystem(new MemoryAdapter);
+		$assets1    = new Assets($this->defaultConfiguration(), $filesystem);
+		$assets2    = new Assets($this->defaultConfiguration(), $filesystem);
+
+		$assets1->add(['style1.css', 'style2.css']);
+		$assets1->add('script.js');
+		$assets2->add(['style1.css', 'style2.css']);
+		$assets2->add('script.js');
+
+		$filesystem->write('css/style1.css', 'foo');
+		$filesystem->write('css/style2.css', 'bar');
+		$filesystem->write('js/script.js', 'baz');
+
+		$css1 = $assets1->css();
+		$js1  = $assets1->js();
+		$css2 = $assets2->css();
+		$js2  = $assets2->js();
+
+		$this->assertSame($css1, $css2);
+		$this->assertSame($js1, $js2);
+	}
 }
