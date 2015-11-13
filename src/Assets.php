@@ -70,6 +70,12 @@ class Assets {
 	const FORMAT_JS_LINK  = '<script%s src="%s"></script>';
 
 	/**
+	 * Format inline assets using printf()
+	 */
+	const FORMAT_CSS_INLINE = '<style>%s</style>';
+	const FORMAT_JS_INLINE  = '<script>%s</script>';
+
+	/**
 	 * Enable the pipeline and minify functions.
 	 *
 	 * @var bool
@@ -126,6 +132,13 @@ class Assets {
 	private $loader;
 
 	/**
+	 * Assets smaller than this will be rendered inline, saving an HTTP request.
+	 *
+	 * @var int
+	 */
+	private $inline_threshold;
+
+	/**
 	 * Create compressed version of assets, to support the NGINX gzip_static option.
 	 *
 	 * @var int
@@ -176,6 +189,7 @@ class Assets {
 			->setCssFilters($config['css_filters'])
 			->setJsFilters($config['js_filters'])
 			->setLoader($config['loader'])
+			->setInlineThreshold($config['inline_threshold'])
 			->setGzipStatic($config['gzip_static'])
 			->setCollections($config['collections']);
 
@@ -328,6 +342,24 @@ class Assets {
 	}
 
 	/**
+	 * @param int $inline_threshold
+	 *
+	 * @return Assets
+	 */
+	public function setInlineThreshold($inline_threshold) {
+		$this->inline_threshold = (int) $inline_threshold;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getInlineThreshold() {
+		return $this->inline_threshold;
+	}
+
+	/**
 	 * @param int $gzip_static
 	 *
 	 * @return Assets
@@ -407,7 +439,7 @@ class Assets {
 	public function css($group = self::GROUP_DEFAULT, array $attributes = []) {
 		$this->checkGroupExists($group);
 
-		return $this->processAssets($attributes, $this->css_assets[$group], '.css', $this->getCssSource(), $this->getCssFilters(), self::FORMAT_CSS_LINK);
+		return $this->processAssets($attributes, $this->css_assets[$group], '.css', $this->getCssSource(), $this->getCssFilters(), self::FORMAT_CSS_LINK, self::FORMAT_CSS_INLINE);
 	}
 
 	/**
@@ -421,22 +453,23 @@ class Assets {
 	public function js($group = self::GROUP_DEFAULT, array $attributes = []) {
 		$this->checkGroupExists($group);
 
-		return $this->processAssets($attributes, $this->js_assets[$group], '.js', $this->getJsSource(), $this->getJsFilters(), self::FORMAT_JS_LINK);
+		return $this->processAssets($attributes, $this->js_assets[$group], '.js', $this->getJsSource(), $this->getJsFilters(), self::FORMAT_JS_LINK, self::FORMAT_JS_INLINE);
 	}
 
 	/**
 	 * Render markup to load the CSS or JS assets.
 	 *
-	 * @param string[]          $attributes Optional attributes, such as ['async']
-	 * @param string[]          $assets     The files to be processed
-	 * @param string            $extension  ".css" or ".js"
-	 * @param string            $source_dir The folder containing the source assets
-	 * @param FilterInterface[] $filters    How to process these assets
-	 * @param string            $format     Template for an HTML link to the asset
+	 * @param string[]          $attributes     Optional attributes, such as ['async']
+	 * @param string[]          $assets         The files to be processed
+	 * @param string            $extension      ".css" or ".js"
+	 * @param string            $source_dir     The folder containing the source assets
+	 * @param FilterInterface[] $filters        How to process these assets
+	 * @param string            $format_link    Template for an HTML link to the asset
+	 * @param string            $format_linline Template for an inline asset
 	 *
 	 * @return string
 	 */
-	private function processAssets(array $attributes, array $assets, $extension, $source_dir, $filters, $format) {
+	private function processAssets(array $attributes, array $assets, $extension, $source_dir, $filters, $format_link, $format_inline) {
 		$hashes = [];
 		$path   = $this->getDestination();
 
@@ -463,11 +496,12 @@ class Assets {
 
 		// The file name of our pipelined asset.
 		$hash = $this->hash(implode('', $hashes));
+		$asset_file = $path . '/' . $hash . '.min' . $extension;
 
 		$this->concatenateFiles($path, $hashes, $hash, $extension);
 		$this->concatenateFiles($path, $hashes, $hash, '.min' . $extension);
 
-		$this->createGzip($path . '/' . $hash . '.min' . $extension);
+		$this->createGzip($asset_file);
 
 		if ($this->getDestinationUrl() === '') {
 			$url = url($path);
@@ -476,9 +510,14 @@ class Assets {
 		}
 
 		if ($this->isEnabled()) {
-			return $this->htmlLinks($url, [$hash], '.min' . $extension, $format, $attributes);
+			$inline_threshold = $this->getInlineThreshold();
+			if ($inline_threshold > 0 && $this->public->getSize($asset_file) <= $inline_threshold) {
+				return sprintf($format_inline, $this->public->read($asset_file));
+			} else {
+				return $this->htmlLinks($url, [$hash], '.min' . $extension, $format_link, $attributes);
+			}
 		} else {
-			return $this->htmlLinks($url, $hashes, $extension, $format, $attributes);
+			return $this->htmlLinks($url, $hashes, $extension, $format_link, $attributes);
 		}
 	}
 

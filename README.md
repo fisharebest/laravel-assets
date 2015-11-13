@@ -55,9 +55,11 @@ You would usually add assets in each of your templates (layouts, views, partials
 
 Of course, you could also add assets anywhere you choose; controllers, helpers, etc.
 
-As well as individual files, you can add named collections of files.  These are defined in `config/assets.php`.
+As well as individual files, you can add named collections of files.
+These are defined in `config/assets.php`.
 
-Where you have dependencies, you should list the files in the order they should be loaded.  For example, if `list.js` depends on jQuery, you would specify jQuery before `list.js`.
+Where you have dependencies, you should list the files in the order they should be loaded.
+For example, if `list.js` depends on jQuery, you would specify jQuery before `list.js`.
 
 ```php
 <!-- resources/views/pages/list.blade.php -->
@@ -65,11 +67,13 @@ Where you have dependencies, you should list the files in the order they should 
 <!-- the rest of your view ... -->
 ```
 
-Duplicates are ignored, so you can add jQuery to each view that uses it and it will only be rendered once.
+Duplicates are ignored, so you can add jQuery to each view that uses it and it will
+only be rendered once.
 
 ## Step 2.  How to render links to assets
 
-It is conventional to render CSS assets in the `<head>` element, and JS assets at the end of the `<body>` element.
+It is conventional to render CSS assets in the `<head>` element, and JS assets at the
+end of the `<body>` element.
 
 
 ```php
@@ -126,9 +130,16 @@ Specify a list of attributes as an argument to the render functions.
 {!! Assets::js('analytics', ['async']) !!}
 ```
 
+### What if I my asset files are tiny?
+
+There's a configuration option `inline_threshold`.  Any asset file
+smaller than this number of bytes will be rendered inline, thus saving
+an HTTP request.  
+
 ### What if I want to change the configuration at runtime?
 
-Configuration can be changed at any time.  It only takes effect when the assets are rendered.
+Configuration can be changed at any time.  It only takes effect when
+the assets are rendered.
 
 ```php
 Assets::setGzipStatic(6);
@@ -137,11 +148,14 @@ Assets::css(); // will create compressed assets
 
 ### What if I want to use my own minifier?
 
-Write your own filter (implement `Fisharebest\LaravelAssets\Filters\FilterInterface`) and specify it in the configuration file `config/assets.php`.  Use one of the existing filters as a template.
+Write your own filter (implement `Fisharebest\LaravelAssets\Filters\FilterInterface`)
+and specify it in the configuration file `config/assets.php`.  Use one of the existing
+filters as a template.
 
 ### What if I want to use a CDN or a cookie-free domain?
 
-Specify a URL in the `destination_url` setting which corresponds to the folder given in `destination`.
+Specify a URL in the `destination_url` setting which corresponds to the folder given
+in `destination`.
 
 ```php
 // config/assets.php
@@ -153,7 +167,9 @@ return [
 
 ### What if I cannot use file_get_contents() because of firewall/proxy issues?
 
-Write your own loader (implement `Fisharebest\LaravelAssets\Loaders\LoaderInterface`) and specify it in the configuration file `config/assets.php`.  Use one of the existing loaders as a template.
+Write your own loader (implement `Fisharebest\LaravelAssets\Loaders\LoaderInterface`)
+and specify it in the configuration file `config/assets.php`.  Use one of the existing
+loaders as a template.
 
 ### How do I delete old files after I update my assets or change my filters?
 

@@ -182,6 +182,21 @@ class ConfigurationTest extends TestCase {
 	}
 
 	/**
+	 * Test getting/setting the "inline_threshold" option.
+	 *
+	 * @covers Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers Fisharebest\LaravelAssets\Assets::getInlineThreshold
+	 * @covers Fisharebest\LaravelAssets\Assets::setInlineThreshold
+	 */
+	public function testInlineThreshold() {
+		$assets = $this->createDefaultAssets();
+		$this->assertSame(0, $assets->getInlineThreshold());
+
+		$assets->setInlineThreshold(2048);
+		$this->assertSame(2048, $assets->getInlineThreshold());
+	}
+
+	/**
 	 * Test getting/setting the "gzip_static" option.
 	 *
 	 * @covers Fisharebest\LaravelAssets\Assets::__construct

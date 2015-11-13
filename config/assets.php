@@ -85,6 +85,14 @@ return [
 	'gzip_static' => 0,
 
 	// --------------------------------------------------------------------------
+	// Should we inline small asset files?
+	// --------------------------------------------------------------------------
+	// Asset files smaller than this number of bytes will be rendered inline,
+	// instead of being fetched in a separate HTTP request.
+	// Typical values might be between 1024 and 2048.
+	'inline_threshold' => 0,
+
+	// --------------------------------------------------------------------------
 	// A list of predefined resources.
 	// --------------------------------------------------------------------------
 	// Predefined groups of resources.  Note that the order of files determines

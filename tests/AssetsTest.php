@@ -114,7 +114,6 @@ class AssetsTest extends TestCase {
 		$this->assertSame('<script async src="min/d41d8cd98f00b204e9800998ecf8427e.min.js"></script>', $assets->js(null, ['async']));
 	}
 
-
 	/**
 	 * Test adding and rendering assets.
 	 *
@@ -199,6 +198,64 @@ class AssetsTest extends TestCase {
 
 		$this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
 		$this->assertTrue($filesystem->has($matches[1][0]));
+	}
+
+	/**
+	 * Test adding and rendering assets.
+	 *
+	 * @covers Fisharebest\LaravelAssets\Assets::add
+	 * @covers Fisharebest\LaravelAssets\Assets::css
+	 * @covers Fisharebest\LaravelAssets\Assets::js
+	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers Fisharebest\LaravelAssets\Assets::hash
+	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 */
+	public function testSmallEnoughToInline() {
+		$filesystem = new Filesystem(new MemoryAdapter);
+		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+		$assets->setInlineThreshold(1024);
+
+		$assets->add(['style1.css', 'style2.css']);
+		$assets->add('script.js');
+
+		$filesystem->write('css/style1.css', 'p {color: red;}');
+		$filesystem->write('css/style2.css', 'div {color: blue;}');
+		$filesystem->write('js/script.js', 'var x=1');
+
+		$this->assertSame('<style>p{color:red}div{color:blue}</style>', $assets->css());
+		$this->assertSame('<script>var x=1</script>', $assets->js());
+	}
+
+	/**
+	 * Test adding and rendering assets.
+	 *
+	 * @covers Fisharebest\LaravelAssets\Assets::add
+	 * @covers Fisharebest\LaravelAssets\Assets::css
+	 * @covers Fisharebest\LaravelAssets\Assets::js
+	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers Fisharebest\LaravelAssets\Assets::hash
+	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 */
+	public function testTooBigToInline() {
+		$filesystem = new Filesystem(new MemoryAdapter);
+		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+		$assets->setInlineThreshold(4);
+
+		$assets->add(['style1.css', 'style2.css']);
+		$assets->add('script.js');
+
+		$filesystem->write('css/style1.css', 'p {color: red;}');
+		$filesystem->write('css/style2.css', 'div {color: blue;}');
+		$filesystem->write('js/script.js', 'var x=1');
+
+		$this->assertNotFalse(preg_match('/link rel="stylesheet"/', $assets->css()));
+		$this->assertNotFalse(preg_match('/<script src=/', $assets->js()));
 	}
 
 	/**
