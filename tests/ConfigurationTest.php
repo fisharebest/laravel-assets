@@ -23,6 +23,7 @@ use Fisharebest\LaravelAssets\Filters\FinalNewline;
 use Fisharebest\LaravelAssets\Filters\MinifyCss;
 use Fisharebest\LaravelAssets\Filters\MinifyJs;
 use Fisharebest\LaravelAssets\Filters\RewriteCssUrls;
+use Fisharebest\LaravelAssets\Loaders\FileGetContents;
 
 /**
  * @author    Greg Roach <fisharebest@gmail.com>
@@ -162,6 +163,22 @@ class ConfigurationTest extends TestCase {
 		$assets->setJsFilters([new MinifyJs]);
 		$this->assertCount(1, $assets->getJsFilters());
 		$this->assertInstanceOf(MinifyJs::class, $assets->getJsFilters()[0]);
+	}
+
+	/**
+	 * Test getting/setting the "loader" option.
+	 *
+	 * @covers Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers Fisharebest\LaravelAssets\Assets::getLoader
+	 * @covers Fisharebest\LaravelAssets\Assets::setLoader
+	 */
+	public function testLoader() {
+		$assets = $this->createDefaultAssets();
+
+		$this->assertInstanceOf(FileGetContents::class, $assets->getLoader());
+
+		$assets->setLoader(new FileGetContents);
+		$this->assertInstanceOf(FileGetContents::class, $assets->getLoader());
 	}
 
 	/**

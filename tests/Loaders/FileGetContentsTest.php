@@ -30,7 +30,7 @@ class FileGetContentsTest extends TestCase {
 	/**
 	 * Test the loadUrl command
 	 *
-	 * @covers Fisharebest\LaravelAssets\Filters\FinalNewline
+	 * @covers Fisharebest\LaravelAssets\Loaders\FileGetContents
 	 */
 	public function testFilter() {
 		$loader = new FileGetContents;

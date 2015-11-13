@@ -21,6 +21,7 @@ namespace Fisharebest\LaravelAssets;
 
 use Fisharebest\LaravelAssets\Commands\Purge;
 use Fisharebest\LaravelAssets\Filters\FilterInterface;
+use Fisharebest\LaravelAssets\Loaders\LoaderInterface;
 use InvalidArgumentException;
 use League\Flysystem\Filesystem;
 
@@ -118,6 +119,13 @@ class Assets {
 	private $js_filters;
 
 	/**
+	 * How to load external files.
+	 *
+	 * @var LoaderInterface
+	 */
+	private $loader;
+
+	/**
 	 * Create compressed version of assets, to support the NGINX gzip_static option.
 	 *
 	 * @var int
@@ -167,6 +175,7 @@ class Assets {
 			->setDestinationUrl($config['destination_url'])
 			->setCssFilters($config['css_filters'])
 			->setJsFilters($config['js_filters'])
+			->setLoader($config['loader'])
 			->setGzipStatic($config['gzip_static'])
 			->setCollections($config['collections']);
 
@@ -280,6 +289,24 @@ class Assets {
 	 */
 	public function getJsFilters() {
 		return $this->js_filters;
+	}
+
+	/**
+	 * @param LoaderInterface $loader
+	 *
+	 * @return Assets
+	 */
+	public function setLoader($loader) {
+		$this->loader = $loader;
+
+		return $this;
+	}
+
+	/**
+	 * @return LoaderInterface
+	 */
+	public function getLoader() {
+		return $this->loader;
 	}
 
 	/**
@@ -421,7 +448,7 @@ class Assets {
 			}
 			if (!$this->public->has($path . '/' . $hash . $extension)) {
 				if ($this->isAbsoluteUrl($asset)) {
-					$data = file_get_contents($asset);
+					$data = $this->getLoader()->loadUrl($asset);
 				} else {
 					$data = $this->public->read($source_dir . '/' . $asset);
 				}
