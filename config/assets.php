@@ -70,6 +70,13 @@ return [
 	],
 
 	// --------------------------------------------------------------------------
+	// How do we load external files?
+	// --------------------------------------------------------------------------
+	// Before we can concatenate JS files we must ensure they end with a newline.
+	// Filters must be instances of Fisharebest\LaravelAssets\FilterInterface
+	'loader' => new Fisharebest\LaravelAssets\Loaders\FileGetContents,
+
+	// --------------------------------------------------------------------------
 	// Generate compressed versions of generated assets?
 	// --------------------------------------------------------------------------
 	// If set to an integer between 1 (fast) and 9 (best), a compressed ".gz"

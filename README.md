@@ -137,7 +137,7 @@ Assets::css(); // will create compressed assets
 
 ### What if I want to use my own minifier?
 
-Write your own filter (implement `interface Fisharebest\LaravelAssets\Filters\FilterInterface`) and specify it in the configuration file `config/assets.php`.  Use one of the existing filters as a template.
+Write your own filter (implement `Fisharebest\LaravelAssets\Filters\FilterInterface`) and specify it in the configuration file `config/assets.php`.  Use one of the existing filters as a template.
 
 ### What if I want to use a CDN or a cookie-free domain?
 
@@ -150,6 +150,11 @@ return [
     'destination_url' => 'http://my-cdn.com/min', // Users read assets from here
 ]
 ```
+
+### What if I cannot use file_get_contents() because of firewall/proxy issues?
+
+Write your own loader (implement `Fisharebest\LaravelAssets\Loaders\LoaderInterface`) and specify it in the configuration file `config/assets.php`.  Use one of the existing loaders as a template.
+
 ### How do I delete old files after I update my assets or change my filters?
 
 There is an artisan command for that.
