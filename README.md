@@ -31,10 +31,10 @@ return [
 ]
 ```
 
-Create a configuration file, `config/assets.php`, containing default values.  Edit this match your project’s directory structure.
+Create a configuration file, `config/assets.php`, containing default values.  Edit the settings in this file to match your project’s directory structure.
 
 ```
-$ php artisan vendor:publish
+$ php artisan vendor:publish --provider="Fisharebest\LaravelAssets\AssetsServiceProvider"
 ```
 
 ## Step 1.  How to add assets
@@ -42,13 +42,13 @@ $ php artisan vendor:publish
 You would usually add assets in each of your templates (layouts, views, partials, etc.) that requires them.
 
 ```php
-<!-- layouts.master.blade.php -->
+<!-- resources/views/layouts/master.blade.php -->
 <?php Assets::add(['jquery', 'bootstrap', 'global.js', 'style.css', 'analytics.js']) ?>
 <!-- the rest of your view ... -->
 ```
 
 ```php
-<!-- pages.list.blade.php -->
+<!-- resources/views/pages/list.blade.php -->
 <?php Assets::add('list.js') ?>
 <!-- the rest of your view ... -->
 ```
@@ -60,7 +60,7 @@ As well as individual files, you can add named collections of files.  These are 
 Where you have dependencies, you should list the files in the order they should be loaded.  For example, if `list.js` depends on jQuery, you would specify jQuery before `list.js`.
 
 ```php
-<!-- pages.list.blade.php -->
+<!-- resources/views/pages/list.blade.php -->
 <?php Assets::add(['jquery', 'list.js']) ?>
 <!-- the rest of your view ... -->
 ```
@@ -73,7 +73,7 @@ It is conventional to render CSS assets in the `<head>` element, and JS assets a
 
 
 ```php
-<!-- layouts/master.blade.php -->
+<!-- resources/views/layouts/master.blade.php -->
 <html>
     <head>
         {!! Assets::css() !!}
@@ -100,7 +100,7 @@ Assets::add('http://example.com/script?parameter', 'js')
 Specify the group as a parameter when adding and rendering assets.
 
 ```php
-<!-- layouts/master.blade.php -->
+<!-- resources/views/layouts/master.blade.php -->
 <?php Assets::add('jquery.js') ?>
 <?php Assets::add('ie8.js', null, 'ie8') ?>
 <?php Assets::add('analytics.js', null, 'head-script') ?>
