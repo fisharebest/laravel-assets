@@ -72,8 +72,9 @@ return [
 	// --------------------------------------------------------------------------
 	// How do we load external files?
 	// --------------------------------------------------------------------------
-	// Before we can concatenate JS files we must ensure they end with a newline.
-	// Filters must be instances of Fisharebest\LaravelAssets\FilterInterface
+	// By default, we load files using file_get_contents().  If your server is
+	// behind a proxy server or requires authentication, you can write your own.
+	// Loaders must be instances of Fisharebest\LaravelAssets\LoaderInterface
 	'loader' => new Fisharebest\LaravelAssets\Loaders\FileGetContents,
 
 	// --------------------------------------------------------------------------
