@@ -8,6 +8,9 @@ use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 
 class Purge extends Command {
+	/** Required for Laravel 5.0 */
+	protected $name = 'assets:purge';
+
 	/**
 	 * The name and signature of the console command.
 	 *
