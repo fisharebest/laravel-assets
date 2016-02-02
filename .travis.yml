@@ -8,9 +8,14 @@ php:
 
 sudo: false
 
+env:
+  matrix:
+    - PREFER_LOWEST="--prefer-lowest"
+    - PREFER_LOWEST=""
+
 before_script:
   - composer self-update
-  - composer update --no-interaction
+  - composer update --no-interaction $PREFER_LOWEST
 
 script:
   - phpunit --coverage-clover tests/clover.xml
