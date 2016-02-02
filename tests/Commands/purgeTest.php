@@ -17,27 +17,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace Fisharebest\LaravelAssets\Tests;
+namespace Fisharebest\LaravelAssets\Tests\Commands;
 
-use Fisharebest\LaravelAssets\Filters\FinalNewline;
+use Fisharebest\LaravelAssets\Commands\Purge;
+use Fisharebest\LaravelAssets\Tests\TestCase;
+use Mockery;
 
 /**
  * @author    Greg Roach <fisharebest@gmail.com>
  * @copyright (c) 2015 Greg Roach
  * @license   GPLv3+
  */
-class FinalNewlineTest extends TestCase {
+class PurgeTest extends TestCase {
 	/**
-	 * Test the final-newline filter
+	 * Test the purge command
 	 *
-	 * @covers Fisharebest\LaravelAssets\Filters\FinalNewline
+	 * @covers Fisharebest\LaravelAssets\Commands\Purge
 	 */
-	public function testFilter() {
-		$assets = $this->createDefaultAssets();
-		$filter = new FinalNewline;
+	public function testPurgeCommandCallsPurgeFunction() {
+		$assets = Mockery::mock(\Fisharebest\LaravelAssets\Assets::class);
+		$command = new Purge($assets);
 
-		$this->assertSame("test\n", $filter->filter('test', 'test.js', $assets));
-		$this->assertSame("test\n", $filter->filter("test\n", 'test.js', $assets));
-		$this->assertSame("test\r\n", $filter->filter("test\r", 'test.js', $assets));
+		$assets->shouldReceive('purge')->with($command);
+
+		$command->handle();
+
+		$this->assertTrue(true);
 	}
 }
