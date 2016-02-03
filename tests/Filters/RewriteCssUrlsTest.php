@@ -2,7 +2,7 @@
 /**
  * laravel-assets: asset management for Laravel 5
  *
- * Copyright (C) 2015 Greg Roach
+ * Copyright (C) 2016 Greg Roach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ use Fisharebest\LaravelAssets\Filters\RewriteCssUrls;
 
 /**
  * @author    Greg Roach <fisharebest@gmail.com>
- * @copyright (c) 2015 Greg Roach
+ * @copyright (c) 2016 Greg Roach
  * @license   GPLv3+
  */
 class RewriteCssUrlsTest extends TestCase {
