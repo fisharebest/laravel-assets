@@ -17,25 +17,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+namespace Fisharebest\LaravelAssets\Tests;
+
+use Fisharebest\LaravelAssets\Assets;
+use Fisharebest\LaravelAssets\AssetsFacade;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Memory\MemoryAdapter;
+use Mockery;
 
 /**
- * Shim for the laravel helper function url() which does not exist during testing.
- *
- * @param string $x
- *
- * @return string
+ * @author    Greg Roach <fisharebest@gmail.com>
+ * @copyright (c) 2015 Greg Roach
+ * @license   GPLv3+
  */
-function url($x) {
-	return $x;
-}
+class AssetsFacadeTest extends TestCase {
+	/**
+	 * Test the facade.
+	 *
+	 * @covers Fisharebest\LaravelAssets\AssetsFacade
+	 */
+	public function testFacade() {
+		AssetsFacade::setFacadeApplication(['assets' => 'SOMETHING']);
 
-/**
- * Shim for the laravel helper function config_path() which does not exist during testing.
- *
- * @param string $x
- *
- * @return string
- */
-function config_path($x) {
-	return $x;
+		$this->assertSame('SOMETHING', AssetsFacade::getFacadeRoot());
+	}
 }

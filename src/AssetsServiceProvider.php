@@ -20,6 +20,7 @@
 namespace Fisharebest\LaravelAssets;
 
 use Fisharebest\LaravelAssets\Commands\Purge;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AdapterInterface;
@@ -51,7 +52,11 @@ class AssetsServiceProvider extends ServiceProvider {
 		});
 
 		// Command-line functions
-		$this->app['command.assets.purge'] = $this->app->share(function ($app) { return new Purge($app['assets']); });
+		// Don't use array access here - it is hard to mock / unit-test.  Use bind() and make() instead.
+		$this->app->bind('command.assets.purge', $this->app->share(function (Application $app) {
+			return new Purge($app->make('assets'));
+		}));
+
 		$this->commands(['command.assets.purge']);
 	}
 }
