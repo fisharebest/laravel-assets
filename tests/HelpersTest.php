@@ -63,7 +63,8 @@ class HelpersTest extends TestCase {
 		$this->assertSame('a/b/d', $assets->normalizePath('a/b/c/../d'));
 		$this->assertSame('a/d/e', $assets->normalizePath('a/b/c/../../d/e'));
 		$this->assertSame('d/e', $assets->normalizePath('a/../b/../c/../d/e'));
-		$this->assertSame('a/./b', $assets->normalizePath('a/./b'));
+		$this->assertSame('a/b', $assets->normalizePath('a/./b'));
+		$this->assertSame('a/d', $assets->normalizePath('a/b/./c/../../d'));
 		$this->assertSame('a/.../b', $assets->normalizePath('a/.../b'));
 	}
 

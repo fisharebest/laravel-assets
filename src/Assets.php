@@ -661,15 +661,18 @@ class Assets {
 	}
 
 	/**
-	 * Normalize a path, removing '..' folders.
+	 * Normalize a path, removing '.' and '..' folders. e.g.
 	 *
-	 * e.g. "a/b/c/../../d" becomes "a/d"
+	 * "a/b/./c/../../d" becomes "a/d"
 	 *
 	 * @param string $url
 	 *
 	 * @return string
 	 */
 	public function normalizePath($url) {
+		while (strpos($url, '/./') !== false) {
+			$url = str_replace('/./', '/', $url);
+		}
 		while (strpos($url, '/../') !== false) {
 			$url = preg_replace('/[^\/]+\/\.\.\//', '', $url, 1);
 		}

@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.4.0 (2016-02-04)
+ - Add support for asset paths beginning `../`
+
 ## 1.3.0 (2016-02-04)
  - Add callback/hook after asset file creation
 

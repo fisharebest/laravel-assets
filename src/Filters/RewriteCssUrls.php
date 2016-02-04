@@ -37,9 +37,9 @@ class RewriteCssUrls implements FilterInterface {
 	 */
 	public function filter($data, $asset_url, $assets) {
 		if ($assets->isAbsoluteUrl($asset_url)) {
-			$prefix = dirname($asset_url) . '/';
+			$prefix = dirname($asset_url);
 		} else {
-			$prefix = $assets->relativePath($assets->getDestination(), $assets->getCssSource()) . '/';
+			$prefix = $assets->relativePath($assets->getDestination(), $assets->getCssSource() . '/' . dirname($asset_url));
 		}
 
 		$data = preg_replace_callback([
@@ -50,7 +50,7 @@ class RewriteCssUrls implements FilterInterface {
 			if ($assets->isAbsoluteUrl($matches[2])) {
 				return $matches[0];
 			} else {
-				return $matches[1] . $assets->normalizePath($prefix . $matches[2]) . $matches[3];
+				return $matches[1] . $assets->normalizePath($prefix . '/' . $matches[2]) . $matches[3];
 			}
 		}, $data);
 
