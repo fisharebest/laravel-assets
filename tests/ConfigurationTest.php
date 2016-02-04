@@ -182,6 +182,20 @@ class ConfigurationTest extends TestCase {
 	}
 
 	/**
+	 * Test getting/setting the "notifiers" option.
+	 *
+	 * @covers Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers Fisharebest\LaravelAssets\Assets::getNotifiers
+	 * @covers Fisharebest\LaravelAssets\Assets::setNotifiers
+	 */
+	public function testNotifiers() {
+		$assets = $this->createDefaultAssets();
+
+		$assets->setNotifiers([]);
+		$this->assertCount(0, $assets->getNotifiers());
+	}
+
+	/**
 	 * Test getting/setting the "inline_threshold" option.
 	 *
 	 * @covers Fisharebest\LaravelAssets\Assets::__construct

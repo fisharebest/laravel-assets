@@ -22,8 +22,7 @@ return [
 	// --------------------------------------------------------------------------
 	// Enable the pipeline and filter functions.
 	// --------------------------------------------------------------------------
-	// You may want to disable this for development, as it is difficult to debug
-	// minified javascript.
+	// You may want to disable this for development, to make debugging easier.
 	'enabled' => true,
 
 	// --------------------------------------------------------------------------
@@ -76,6 +75,13 @@ return [
 	// behind a proxy server or requires authentication, you can write your own.
 	// Loaders must be instances of Fisharebest\LaravelAssets\LoaderInterface
 	'loader' => new Fisharebest\LaravelAssets\Loaders\FileGetContents,
+
+	// --------------------------------------------------------------------------
+	// What should we do after we create an asset file?
+	// --------------------------------------------------------------------------
+	// You could use this opportunity to upload the asset file to your CDN.
+	// Notifiers must be instances of Fisharebest\LaravelAssets\NotifierInterface
+	'notifiers' => [],
 
 	// --------------------------------------------------------------------------
 	// Generate compressed versions of generated assets?

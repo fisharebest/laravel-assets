@@ -134,7 +134,7 @@ Specify a list of attributes as an argument to the render functions.
 
 There's a configuration option `inline_threshold`.  Any asset file
 smaller than this number of bytes will be rendered inline, thus saving
-an HTTP request.  
+an HTTP request.
 
 ### What if I want to change the configuration at runtime?
 
@@ -164,6 +164,15 @@ return [
     'destination_url' => 'http://my-cdn.com/min', // Users read assets from here
 ]
 ```
+
+### What if I need to copy my pipelined assets to an external server?
+
+Write your own notifier (implement `Fisharebest\LaravelAssets\Notifiers\NotifierInterface`)
+and specify it in the configuration file `config/assets.php`.  Use one of the existing
+notifiers as a template.
+
+You would most likely set the `destination_url` to your CDN server, and add a notifier
+which copies the file from the `destination` folder to this server.
 
 ### What if I cannot use file_get_contents() because of firewall/proxy issues?
 

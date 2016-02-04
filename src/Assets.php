@@ -22,6 +22,7 @@ namespace Fisharebest\LaravelAssets;
 use Fisharebest\LaravelAssets\Commands\Purge;
 use Fisharebest\LaravelAssets\Filters\FilterInterface;
 use Fisharebest\LaravelAssets\Loaders\LoaderInterface;
+use Fisharebest\LaravelAssets\Notifiers\NotifierInterface;
 use InvalidArgumentException;
 use League\Flysystem\Filesystem;
 
@@ -132,6 +133,13 @@ class Assets {
 	private $loader;
 
 	/**
+	 * Do something when we create an asset file.
+	 *
+	 * @var NotifierInterface[]
+	 */
+	private $notifiers;
+
+	/**
 	 * Assets smaller than this will be rendered inline, saving an HTTP request.
 	 *
 	 * @var int
@@ -189,6 +197,7 @@ class Assets {
 			->setCssFilters($config['css_filters'])
 			->setJsFilters($config['js_filters'])
 			->setLoader($config['loader'])
+			->setNotifiers($config['notifiers'])
 			->setInlineThreshold($config['inline_threshold'])
 			->setGzipStatic($config['gzip_static'])
 			->setCollections($config['collections']);
@@ -269,6 +278,7 @@ class Assets {
 	public function getDestinationUrl() {
 		return $this->destination_url;
 	}
+
 	/**
 	 * @param FilterInterface[] $css_filters
 	 *
@@ -321,6 +331,24 @@ class Assets {
 	 */
 	public function getLoader() {
 		return $this->loader;
+	}
+
+	/**
+	 * @param NotifierInterface[] $css_filters
+	 *
+	 * @return Assets
+	 */
+	public function setNotifiers(array $notifiers) {
+		$this->notifiers = $notifiers;
+
+		return $this;
+	}
+
+	/**
+	 * @return NotifierInterface[]
+	 */
+	public function getNotifiers() {
+		return $this->notifiers;
 	}
 
 	/**
@@ -502,6 +530,10 @@ class Assets {
 		$this->concatenateFiles($path, $hashes, $hash, '.min' . $extension);
 
 		$this->createGzip($asset_file);
+
+		foreach ($this->notifiers as $notifier) {
+			$notifier->created($asset_file);
+		}
 
 		if ($this->getDestinationUrl() === '') {
 			$url = url($path);

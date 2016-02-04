@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.3.0 (2016-02-04)
+ - Add callback/hook after asset file creation
+
 ## 1.2.1 (2016-02-02)
  - Fix #4 - artisan command incompatible with Laravel 5.0
 

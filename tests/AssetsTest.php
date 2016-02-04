@@ -20,8 +20,10 @@
 namespace Fisharebest\LaravelAssets\Tests;
 
 use Fisharebest\LaravelAssets\Assets;
+use Fisharebest\LaravelAssets\Notifiers\NotifierInterface;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
+use Mockery;
 
 /**
  * @author    Greg Roach <fisharebest@gmail.com>
@@ -163,6 +165,22 @@ class AssetsTest extends TestCase {
 
 		$this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.css.gz'));
 		$this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.js.gz'));
+	}
+
+	/**
+	 * Test the notification hooks.
+	 *
+	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
+	 */
+	public function testNotifiers() {
+		$filesystem = new Filesystem(new MemoryAdapter);
+		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+
+		$notifier = Mockery::mock(NotifierInterface::class);
+		$notifier->shouldReceive('created')->with('min/d41d8cd98f00b204e9800998ecf8427e.min.css');
+
+		$assets->setNotifiers([$notifier]);
+		$assets->css();
 	}
 
 	/**
