@@ -1,6 +1,7 @@
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/84c48b77-7330-4e2a-b66d-f981b41a76a7/mini.png)](https://insight.sensiolabs.com/projects/84c48b77-7330-4e2a-b66d-f981b41a76a7)
+[![Latest Stable Version](https://poser.pugx.org/fisharebest/laravel-assets/v/stable.svg)](https://packagist.org/packages/fisharebest/laravel-assets)
 [![Build Status](https://travis-ci.org/fisharebest/laravel-assets.svg?branch=master)](https://travis-ci.org/fisharebest/laravel-assets)
 [![Coverage Status](https://coveralls.io/repos/fisharebest/laravel-assets/badge.svg?branch=master&service=github)](https://coveralls.io/github/fisharebest/laravel-assets?branch=master)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/84c48b77-7330-4e2a-b66d-f981b41a76a7/mini.png)](https://insight.sensiolabs.com/projects/84c48b77-7330-4e2a-b66d-f981b41a76a7)
 
 # laravel-assets
 
