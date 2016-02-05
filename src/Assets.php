@@ -334,7 +334,7 @@ class Assets {
 	}
 
 	/**
-	 * @param NotifierInterface[] $css_filters
+	 * @param NotifierInterface[] $notifiers
 	 *
 	 * @return Assets
 	 */
@@ -487,13 +487,13 @@ class Assets {
 	/**
 	 * Render markup to load the CSS or JS assets.
 	 *
-	 * @param string[]          $attributes     Optional attributes, such as ['async']
-	 * @param string[]          $assets         The files to be processed
-	 * @param string            $extension      ".css" or ".js"
-	 * @param string            $source_dir     The folder containing the source assets
-	 * @param FilterInterface[] $filters        How to process these assets
-	 * @param string            $format_link    Template for an HTML link to the asset
-	 * @param string            $format_linline Template for an inline asset
+	 * @param string[]          $attributes    Optional attributes, such as ['async']
+	 * @param string[]          $assets        The files to be processed
+	 * @param string            $extension     ".css" or ".js"
+	 * @param string            $source_dir    The folder containing the source assets
+	 * @param FilterInterface[] $filters       How to process these assets
+	 * @param string            $format_link   Template for an HTML link to the asset
+	 * @param string            $format_inline Template for an inline asset
 	 *
 	 * @return string
 	 */
@@ -555,6 +555,8 @@ class Assets {
 
 	/**
 	 * Make sure that the specified group (i.e. array key) exists.
+	 *
+	 * @param string $group
 	 */
 	private function checkGroupExists($group) {
 		if (!array_key_exists($group, $this->css_assets)) {
@@ -654,6 +656,8 @@ class Assets {
 	/**
 	 * Is a URL absolute or relative?
 	 *
+	 * @param string $url
+	 *
 	 * @return bool
 	 */
 	public function isAbsoluteUrl($url) {
@@ -685,7 +689,8 @@ class Assets {
 	 *
 	 * e.g. the relative path from "a/b/c" to "a/d" is "../../d"
 	 *
-	 * @param string $url
+	 * @param string $source
+	 * @param string $destination
 	 *
 	 * @return string
 	 */
@@ -708,7 +713,7 @@ class Assets {
 	/**
 	 * Purge generated assets older than a given number of days
 	 *
-	 * @param int $command
+	 * @param Purge $command
 	 */
 	public function purge(Purge $command) {
 		$days    = (int) $command->option('days');

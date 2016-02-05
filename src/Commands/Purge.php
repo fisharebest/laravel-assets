@@ -28,7 +28,7 @@ class Purge extends Command {
 	/**
 	 * An instance of our assets object.
 	 *
-	 * @var Filesystem $assets
+	 * @var Assets $assets
 	 */
 	private $assets;
 
