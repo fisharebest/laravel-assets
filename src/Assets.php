@@ -459,8 +459,8 @@ class Assets {
 	/**
 	 * Render markup to load the CSS assets.
 	 *
-	 * @param string $group      Optionally split your assets into multiple groups, such as "head" and "body".
-	 * @param array  $attributes Optional attributes, such as ['media' => 'print']
+	 * @param string   $group      Optionally split your assets into multiple groups, such as "head" and "body".
+	 * @param string[] $attributes Optional attributes, such as ['media' => 'print']
 	 *
 	 * @return string
 	 */
@@ -473,8 +473,8 @@ class Assets {
 	/**
 	 * Render markup to load the JS assets.
 	 *
-	 * @param string $group      Optionally split your assets into multiple groups, such as "head" and "body".
-	 * @param array  $attributes Optional attributes, such as ['async']
+	 * @param string   $group      Optionally split your assets into multiple groups, such as "head" and "body".
+	 * @param string[] $attributes Optional attributes, such as ['async']
 	 *
 	 * @return string
 	 */
@@ -599,7 +599,7 @@ class Assets {
 	/**
 	 * Optionally create a .gz version of a file - to support the NGINX gzip_static option.
 	 *
-	 * @param $path
+	 * @param string $path
 	 */
 	private function createGzip($path) {
 		$gzip = $this->getGzipStatic();
@@ -636,7 +636,7 @@ class Assets {
 	/**
 	 * Convert an array of attributes to HTML.
 	 *
-	 * @param array $attributes
+	 * @param string[] $attributes
 	 *
 	 * @return string
 	 */

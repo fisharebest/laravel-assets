@@ -33,10 +33,10 @@ class MinifyJs implements FilterInterface {
 	 * @return string
 	 */
 	public function filter($data, $asset_url, $assets) {
-		if (preg_match(Assets::REGEX_MINIFIED_JS, $asset_url)) {
-			return $data;
-		} else {
-			return JSMin::minify($data);
+		if (!preg_match(Assets::REGEX_MINIFIED_JS, $asset_url)) {
+			$data = JSMin::minify($data);
 		}
+
+		return $data;
 	}
 }

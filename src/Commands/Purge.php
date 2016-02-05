@@ -4,7 +4,6 @@ namespace Fisharebest\LaravelAssets\Commands;
 
 use Fisharebest\LaravelAssets\Assets;
 use Illuminate\Console\Command;
-use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 
 class Purge extends Command {

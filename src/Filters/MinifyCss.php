@@ -33,10 +33,10 @@ class MinifyCss implements FilterInterface {
 	 * @return string
 	 */
 	public function filter($data, $asset_url, $assets) {
-		if (preg_match(Assets::REGEX_MINIFIED_CSS, $asset_url)) {
-			return $data;
-		} else {
-			return (new CSSmin())->run($data);
+		if (!preg_match(Assets::REGEX_MINIFIED_CSS, $asset_url)) {
+			$data = (new CSSmin())->run($data);
 		}
+
+		return $data;
 	}
 }
