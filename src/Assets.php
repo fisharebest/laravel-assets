@@ -733,7 +733,7 @@ class Assets {
 
 	/**
 	 * @param array $file
-	 * @param int   $days
+	 * @param int   $timestamp
 	 *
 	 * @return bool
 	 */

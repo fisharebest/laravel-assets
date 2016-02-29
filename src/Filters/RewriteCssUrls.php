@@ -46,7 +46,7 @@ class RewriteCssUrls implements FilterInterface {
 			'/(\burl\s*\(\s*")([^"]+?)("\s*\))/',
 			'/(\burl\s*\(\s*\')([^\']+?)(\'\s*\))/',
 			'/(\burl\s*\(\s*)([^\'"]+?)(\s*\))/',
-		], function ($matches) use ($assets, $prefix) {
+		], function($matches) use ($assets, $prefix) {
 			if ($assets->isAbsoluteUrl($matches[2])) {
 				return $matches[0];
 			} else {
