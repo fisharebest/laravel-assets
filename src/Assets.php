@@ -62,7 +62,7 @@ class Assets {
 	/**
 	 * File group options.  Most sites will only use the default group.
 	 */
-	const GROUP_DEFAULT  = '';
+	const GROUP_DEFAULT = '';
 
 	/**
 	 * Format HTML links using printf()
@@ -523,7 +523,7 @@ class Assets {
 		}
 
 		// The file name of our pipelined asset.
-		$hash = $this->hash(implode('', $hashes));
+		$hash       = $this->hash(implode('', $hashes));
 		$asset_file = $path . '/' . $hash . '.min' . $extension;
 
 		$this->concatenateFiles($path, $hashes, $hash, $extension);
@@ -604,8 +604,8 @@ class Assets {
 	private function createGzip($path) {
 		$gzip = $this->getGzipStatic();
 
-		if ($gzip >=1 && $gzip <= 9 && function_exists('gzcompress') && !$this->public->has($path . '.gz')) {
-			$content = $this->public->read($path);
+		if ($gzip >= 1 && $gzip <= 9 && function_exists('gzcompress') && !$this->public->has($path . '.gz')) {
+			$content    = $this->public->read($path);
 			$content_gz = gzcompress($content, $gzip);
 			$this->public->write($path . '.gz', $content_gz);
 		}
@@ -614,9 +614,9 @@ class Assets {
 	/**
 	 * Generate HTML links to a list of processed asset files.
 	 *
-	 * @param string   $url        path to the assets
-	 * @param string[] $hashes     base filename
-	 * @param string   $extension  ".css", ".min.js", etc.
+	 * @param string   $url       path to the assets
+	 * @param string[] $hashes    base filename
+	 * @param string   $extension ".css", ".min.js", etc.
 	 * @param string   $format
 	 * @param string[] $attributes
 	 *
@@ -716,17 +716,30 @@ class Assets {
 	 * @param Purge $command
 	 */
 	public function purge(Purge $command) {
-		$days    = (int) $command->option('days');
-		$verbose = (bool) $command->option('verbose');
-		$files   = $this->public->listContents($this->getDestination(), true);
+		$days      = (int) $command->option('days');
+		$verbose   = (bool) $command->option('verbose');
+		$files     = $this->public->listContents($this->getDestination(), true);
+		$timestamp = time() - $days * 86400;
 
 		foreach ($files as $file) {
-			if ($file['timestamp'] <= time() - $days * 86400) {
+			if ($this->needsPurge($file, $timestamp)) {
 				$this->public->delete($file['path']);
 				$command->info('Deleted: ' . $file['path']);
 			} elseif ($verbose) {
 				$command->info('Keeping: ' . $file['path']);
 			}
 		}
+	}
+
+	/**
+	 * @param array $file
+	 * @param int   $days
+	 *
+	 * @return bool
+	 */
+	private function needsPurge(array $file, $timestamp) {
+		$eligible = preg_match(self::REGEX_JS, $file['path']) || preg_match(self::REGEX_CSS, $file['path']);
+
+		return $eligible && $file['timestamp'] <= $timestamp;
 	}
 }

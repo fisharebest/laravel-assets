@@ -20,6 +20,7 @@
 namespace Fisharebest\LaravelAssets\Tests;
 
 use Fisharebest\LaravelAssets\Assets;
+use Fisharebest\LaravelAssets\Commands\Purge;
 use Fisharebest\LaravelAssets\Notifiers\NotifierInterface;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
@@ -409,5 +410,33 @@ class AssetsTest extends TestCase {
 
 		$this->assertSame($css1, $css2);
 		$this->assertSame($js1, $js2);
+	}
+
+	/**
+	 * Test purging old files.
+	 *
+	 * @covers Fisharebest\LaravelAssets\Assets::purge
+	 * @covers Fisharebest\LaravelAssets\Assets::needsPurge
+	 */
+	public function testPurge() {
+		$filesystem = new Filesystem(new MemoryAdapter);
+		$filesystem->write('min/style.css', 'foo');
+		$filesystem->write('min/script.js', 'bar');
+		$filesystem->write('min/.gitignore', 'baz');
+
+		$assets = new Assets($this->defaultConfiguration(), $filesystem);
+
+		$command = Mockery::mock(Purge::class);
+		$command->shouldReceive('option')->with('days');
+		$command->shouldReceive('option')->with('verbose');
+		$command->shouldReceive('info')->with('Deleted: min/style.css');
+		$command->shouldReceive('info')->with('Deleted: min/script.js');
+		$command->shouldReceive('info')->with('Keeping: min/.gitignore');
+
+		$assets->purge($command);
+
+		$this->assertFalse($filesystem->has('min/style.css'));
+		$this->assertFalse($filesystem->has('min/script.js'));
+		$this->assertTrue($filesystem->has('min/.gitignore'));
 	}
 }
