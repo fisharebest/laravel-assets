@@ -543,6 +543,8 @@ class Assets {
 		foreach ($assets as $asset) {
 			if ($this->isAbsoluteUrl($asset)) {
 				$hash = $this->hash($asset);
+			} elseif ($this->getUseResources()) {
+				$hash = $this->hash($asset . $this->resources->getTimestamp($source_dir . '/' . $asset));
 			} else {
 				$hash = $this->hash($asset . $this->public->getTimestamp($source_dir . '/' . $asset));
 			}
