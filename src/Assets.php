@@ -549,7 +549,7 @@ class Assets {
 			if (!$this->public->has($path . '/' . $hash . $extension)) {
 				if ($this->isAbsoluteUrl($asset)) {
 					$data = $this->getLoader()->loadUrl($asset);
-                                } elseif ($this->getUseResources()) {
+				} elseif ($this->getUseResources()) {
                                         $data = $this->resources->read($source_dir . '/' . $asset);
 				} else {
 					$data = $this->public->read($source_dir . '/' . $asset);
