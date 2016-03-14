@@ -1,2 +1,5 @@
 composer.lock
 vendor/
+
+# Editor specific folders
+/nbproject/
