@@ -47,7 +47,7 @@ class AssetsServiceProvider extends ServiceProvider {
 		// Bind our component into the IoC container.
 		$this->app->singleton('assets', function($app) {
 			$public_filesystem = new Filesystem(new Local(public_path()), ['visibility' => AdapterInterface::VISIBILITY_PUBLIC]);
-                        $resources_filesystem = new Filesystem(new Local(resource_path('assets')), ['visibility' => AdapterInterface::VISIBILITY_PUBLIC]);
+			$resources_filesystem = new Filesystem(new Local(resource_path('assets')), ['visibility' => AdapterInterface::VISIBILITY_PUBLIC]);
 
 			return new Assets($app['config']['assets'], $public_filesystem, $resources_filesystem);
 		});
