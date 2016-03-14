@@ -232,7 +232,6 @@ class Assets {
 	public function setUseResourcePath($use) {
 		$this->use_resources_path = $use;
 
-		$this->public = $filesystem;
 		return $this;
 	}
         
