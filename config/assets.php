@@ -30,7 +30,7 @@ return [
 	// --------------------------------------------------------------------------
 	// Setting to true means that, yes - resource path should be use
 	// otherwise public folder will be used
-	'use_resource_path' => false,
+	'use_resources' => false,
 
 	// --------------------------------------------------------------------------
 	// Where do we find the application's original assets?

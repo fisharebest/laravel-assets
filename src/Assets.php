@@ -216,7 +216,7 @@ class Assets {
 			->setInlineThreshold($config['inline_threshold'])
 			->setGzipStatic($config['gzip_static'])
 			->setCollections($config['collections'])
-			->setUseResourcePath($config['use_resources']);
+			->setUseResources($config['use_resources']);
 
 		$this->public = $public_filesystem;
 		$this->resources = $resources_filesystem;
