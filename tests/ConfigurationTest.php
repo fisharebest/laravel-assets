@@ -31,6 +31,25 @@ use Fisharebest\LaravelAssets\Loaders\FileGetContents;
  * @license   GPLv3+
  */
 class ConfigurationTest extends TestCase {
+    
+    	/**
+	 * Test getting/setting the "enabled" option.
+	 *
+	 * @covers Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers Fisharebest\LaravelAssets\Assets::getUseResources
+	 * @covers Fisharebest\LaravelAssets\Assets::setUseResources
+	 */
+	public function testUseResourcePath() {
+		$assets = $this->createDefaultAssets();
+		$this->assertFalse($assets->getUseResources());
+
+		$assets->setUseResources(false);
+		$this->assertFalse($assets->getUseResources());
+
+		$assets->setUseResources(true);
+		$this->assertTrue($assets->getUseResources());
+	}
+    
 	/**
 	 * Test getting/setting the "enabled" option.
 	 *

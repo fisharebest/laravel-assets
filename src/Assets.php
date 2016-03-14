@@ -88,7 +88,7 @@ class Assets {
 	 *
 	 * @var bool
 	 */
-	private $use_resources_path;
+	private $use_resources;
 
 	/**
 	 * Where do we read CSS files.
@@ -216,7 +216,7 @@ class Assets {
 			->setInlineThreshold($config['inline_threshold'])
 			->setGzipStatic($config['gzip_static'])
 			->setCollections($config['collections'])
-			->setUseResourcePath($config['use_resource_path']);
+			->setUseResources($config['use_resources']);
 
 		$this->public = $public_filesystem;
 		$this->resources = $resources_filesystem;
@@ -229,8 +229,8 @@ class Assets {
 	 *
 	 * @return Assets
 	 */
-	public function setUseResourcePath($use) {
-		$this->use_resources_path = $use;
+	public function setUseResources($use) {
+		$this->use_resources = $use;
 
 		return $this;
 	}
@@ -240,8 +240,8 @@ class Assets {
 	 * 
 	 * @return bool
 	 */
-	public function getUseResourcePath() {
-		return $this->use_resources_path;
+	public function getUseResources() {
+		return $this->use_resources;
 	}
 
 	/**
@@ -549,7 +549,7 @@ class Assets {
 			if (!$this->public->has($path . '/' . $hash . $extension)) {
 				if ($this->isAbsoluteUrl($asset)) {
 					$data = $this->getLoader()->loadUrl($asset);
-                                } elseif ($this->use_resources_path) {
+                                } elseif ($this->getUseResources()) {
                                         $data = $this->resources->read($source_dir . '/' . $asset);
 				} else {
 					$data = $this->public->read($source_dir . '/' . $asset);
