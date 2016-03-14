@@ -24,11 +24,19 @@ return [
 	// --------------------------------------------------------------------------
 	// You may want to disable this for development, to make debugging easier.
 	'enabled' => true,
+    
+	// --------------------------------------------------------------------------
+	// Should we read css and js source files from resource path?
+	// --------------------------------------------------------------------------
+	// Setting to true means that, yes - resource path should be use
+	// otherwise public folder will be used
+	'use_resource_path' => false,
 
 	// --------------------------------------------------------------------------
 	// Where do we find the application's original assets?
 	// --------------------------------------------------------------------------
-	// This is a relative path from the root of the public folder.
+	// This is a relative path from the root of the public or resource/assets 
+        // folder (see use_resource_path configuration item above)
 	'css_source' => 'css',
 	'js_source'  => 'js',
 
