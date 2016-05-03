@@ -2,7 +2,7 @@ CHANGELOG
 =========
 
 ## 1.4.1 (2016-02-29)
- - Do not purge non-asset files, such as `.min/gitignore`
+ - Do not purge non-asset files, such as `min/.gitignore`
 
 ## 1.4.0 (2016-02-04)
  - Add support for asset paths beginning `../`
