@@ -3,6 +3,7 @@ CHANGELOG
 
 ## 1.4.2 (2017-02-20)
  - Use our own version of PHPUnit in Travis
+ - Laravel 5.4 compatibility
 
 ## 1.4.1 (2016-02-29)
  - Do not purge non-asset files, such as `min/.gitignore`
