@@ -82,6 +82,13 @@ class Assets {
 	 * @var bool
 	 */
 	private $enabled;
+        
+	/**
+	 * Use resource path instead of public for reading data?
+	 *
+	 * @var bool
+	 */
+	private $use_resources;
 
 	/**
 	 * Where do we read CSS files.
@@ -180,14 +187,22 @@ class Assets {
 	 * @var Filesystem
 	 */
 	private $public;
+        
+	/**
+	 * The filesystem corresponding to our public path.
+	 *
+	 * @var Filesystem
+	 */
+	private $resources;
 
 	/**
 	 * Create an asset manager.
 	 *
-	 * @param array      $config     The local config, merged with the default config
-	 * @param Filesystem $filesystem The public filesystem, where we read/write assets
+	 * @param array      $config                The local config, merged with the default config
+	 * @param Filesystem $public_filesystem     The public filesystem, where we read/write assets
+	 * @param Filesystem $resources_filesystem  The resources filesystem, where we read/write assets
 	 */
-	public function __construct(array $config, Filesystem $filesystem) {
+	public function __construct(array $config, Filesystem $public_filesystem, Filesystem $resources_filesystem) {
 		$this
 			->setEnabled($config['enabled'])
 			->setCssSource($config['css_source'])
@@ -200,9 +215,33 @@ class Assets {
 			->setNotifiers($config['notifiers'])
 			->setInlineThreshold($config['inline_threshold'])
 			->setGzipStatic($config['gzip_static'])
-			->setCollections($config['collections']);
+			->setCollections($config['collections'])
+			->setUseResources($config['use_resources']);
 
-		$this->public = $filesystem;
+		$this->public = $public_filesystem;
+		$this->resources = $resources_filesystem;
+	}
+        
+	/**
+	 * Sets use resource path property
+	 * 
+	 * @param bool $use
+	 *
+	 * @return Assets
+	 */
+	public function setUseResources($use) {
+		$this->use_resources = $use;
+
+		return $this;
+	}
+        
+	/**
+	 * Gets use resource path property
+	 * 
+	 * @return bool
+	 */
+	public function getUseResources() {
+		return $this->use_resources;
 	}
 
 	/**
@@ -504,12 +543,16 @@ class Assets {
 		foreach ($assets as $asset) {
 			if ($this->isAbsoluteUrl($asset)) {
 				$hash = $this->hash($asset);
+			} elseif ($this->getUseResources()) {
+				$hash = $this->hash($asset . $this->resources->getTimestamp($source_dir . '/' . $asset));
 			} else {
 				$hash = $this->hash($asset . $this->public->getTimestamp($source_dir . '/' . $asset));
 			}
 			if (!$this->public->has($path . '/' . $hash . $extension)) {
 				if ($this->isAbsoluteUrl($asset)) {
 					$data = $this->getLoader()->loadUrl($asset);
+				} elseif ($this->getUseResources()) {
+                                        $data = $this->resources->read($source_dir . '/' . $asset);
 				} else {
 					$data = $this->public->read($source_dir . '/' . $asset);
 				}
