@@ -19,7 +19,8 @@
 	],
 	"require": {
 		"league/flysystem": "~1.0",
-		"mrclay/minify": "~2.0"
+		"mrclay/minify": "~3.0",
+		"tedivm/jshrink": "~1.1"
 	},
 	"require-dev": {
 		"illuminate/console": "~5.0",

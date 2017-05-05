@@ -20,7 +20,7 @@
 namespace Fisharebest\LaravelAssets\Filters;
 
 use Fisharebest\LaravelAssets\Assets;
-use JSMin;
+use Minify\JS\JShrink;
 
 class MinifyJs implements FilterInterface {
 	/**
@@ -34,7 +34,7 @@ class MinifyJs implements FilterInterface {
 	 */
 	public function filter($data, $asset_url, $assets) {
 		if (!preg_match(Assets::REGEX_MINIFIED_JS, $asset_url)) {
-			$data = JSMin::minify($data);
+			$data = JShrink::minify($data);
 		}
 
 		return $data;

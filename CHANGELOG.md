@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.5.0 (2017-05-05)
+ - Update dependencies to support PHP 7.1
+
 ## 1.4.2 (2017-02-20)
  - Use our own version of PHPUnit in Travis
  - Laravel 5.4 compatibility
