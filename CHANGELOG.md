@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.5.1 (2017-06-29)
+ - Fix #10 - upstream changes to mrclay/minify between 3.0.0 and 3.0.1
+
 ## 1.5.0 (2017-05-05)
  - Update dependencies to support PHP 7.1
 
