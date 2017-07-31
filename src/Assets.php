@@ -50,7 +50,7 @@ class Assets {
 	/**
 	 * Regular expression to match an external url
 	 */
-	const REGEX_EXTERNAL_URL = '/^((https?:)\/\/|data:)/i';
+	const REGEX_EXTERNAL_URL = '/^((https?:)?\/\/|data:)/i';
 
 	/**
 	 * File type detection options

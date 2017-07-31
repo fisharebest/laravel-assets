@@ -41,6 +41,7 @@ class HelpersTest extends TestCase {
 
 		$this->assertTrue($assets->isAbsoluteUrl('http://example.com'));
 		$this->assertTrue($assets->isAbsoluteUrl('https://example.com'));
+		$this->assertTrue($assets->isAbsoluteUrl('//example.com'));
 		$this->assertTrue($assets->isAbsoluteUrl('data:some-encoded-data'));
 		$this->assertFalse($assets->isAbsoluteUrl('unknown://example.com'));
 		$this->assertFalse($assets->isAbsoluteUrl('http:/example.com'));
