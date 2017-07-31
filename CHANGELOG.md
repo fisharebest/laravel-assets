@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.5.2 (2017-07-31)
+ - Merge #11 - recognise protocol-agnostic URLs
+
 ## 1.5.1 (2017-06-29)
  - Fix #10 - upstream changes to mrclay/minify between 3.0.0 and 3.0.1
 
