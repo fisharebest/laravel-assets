@@ -30,7 +30,7 @@ class RewriteCssUrlsTest extends TestCase {
 	/**
 	 * Test the filter RewriteCssUrls
 	 *
-	 * @covers Fisharebest\LaravelAssets\Filters\RewriteCssUrls
+	 * @covers \Fisharebest\LaravelAssets\Filters\RewriteCssUrls
 	 */
 	public function testFilter() {
 		$assets = $this->createDefaultAssets();
@@ -46,7 +46,7 @@ class RewriteCssUrlsTest extends TestCase {
 	/**
 	 * Test the filter RewriteCssUrls
 	 *
-	 * @covers Fisharebest\LaravelAssets\Filters\RewriteCssUrls
+	 * @covers \Fisharebest\LaravelAssets\Filters\RewriteCssUrls
 	 */
 	public function testAbsoluteUrl() {
 		$assets = $this->createDefaultAssets();

@@ -19,11 +19,6 @@
  */
 namespace Fisharebest\LaravelAssets\Tests;
 
-use Fisharebest\LaravelAssets\Filters\FinalNewline;
-use Fisharebest\LaravelAssets\Filters\MinifyCss;
-use Fisharebest\LaravelAssets\Filters\MinifyJs;
-use Fisharebest\LaravelAssets\Filters\RewriteCssUrls;
-
 /**
  * @author    Greg Roach <fisharebest@gmail.com>
  * @copyright (c) 2017 Greg Roach
@@ -34,7 +29,7 @@ class HelpersTest extends TestCase {
 	/**
 	 * Test isAbsoluteUrl() helper.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::isAbsoluteUrl
+	 * @covers \Fisharebest\LaravelAssets\Assets::isAbsoluteUrl
 	 */
 	public function testIsAbsoluteUrl() {
 		$assets = $this->createDefaultAssets();
@@ -52,7 +47,7 @@ class HelpersTest extends TestCase {
 	/**
 	 * Test normalizePath() helper.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::normalizePath
+	 * @covers \Fisharebest\LaravelAssets\Assets::normalizePath
 	 */
 	public function testNormalizePath() {
 		$assets = $this->createDefaultAssets();
@@ -72,7 +67,7 @@ class HelpersTest extends TestCase {
 	/**
 	 * Test relativePath() helper.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::relativePath
+	 * @covers \Fisharebest\LaravelAssets\Assets::relativePath
 	 */
 	public function testRelativePath() {
 		$assets = $this->createDefaultAssets();

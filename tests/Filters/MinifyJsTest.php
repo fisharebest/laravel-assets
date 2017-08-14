@@ -30,7 +30,7 @@ class MinifyJsTest extends TestCase {
 	/**
 	 * Test the filter MinifyJS
 	 *
-	 * @covers Fisharebest\LaravelAssets\Filters\MinifyJs
+	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs
 	 */
 	public function testFilter() {
 		$assets = $this->createDefaultAssets();
@@ -42,7 +42,7 @@ class MinifyJsTest extends TestCase {
 	/**
 	 * Test the filter MinifyJS
 	 *
-	 * @covers Fisharebest\LaravelAssets\Filters\MinifyJs
+	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs
 	 */
 	public function testAlreadyMinified() {
 		$assets = $this->createDefaultAssets();

@@ -32,7 +32,7 @@ class AssetsServiceProviderTest extends TestCase {
 	/**
 	 * Test booting the service provider.
 	 *
-	 * @covers Fisharebest\LaravelAssets\AssetsServiceProvider
+	 * @covers \Fisharebest\LaravelAssets\AssetsServiceProvider
 	 */
 	public function testBoot() {
 		$app = Mockery::mock(Application::class);
@@ -49,7 +49,7 @@ class AssetsServiceProviderTest extends TestCase {
 	/**
 	 * Test registering the service provider.
 	 *
-	 * @covers Fisharebest\LaravelAssets\AssetsServiceProvider
+	 * @covers \Fisharebest\LaravelAssets\AssetsServiceProvider
 	 */
 	public function testRegister() {
 		$app = Mockery::mock(Application::class);

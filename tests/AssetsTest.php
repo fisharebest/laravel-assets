@@ -35,16 +35,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testEmpty() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -74,16 +74,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 *
 	 * @expectedException        \InvalidArgumentException
 	 * @expectedExceptionMessage Unknown asset type: foo!
@@ -98,16 +98,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testAttributes() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -120,16 +120,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testDestinationUrl() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -144,16 +144,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testGzip() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -171,7 +171,7 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test the notification hooks.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
 	 */
 	public function testNotifiers() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -187,16 +187,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testAdd() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -222,15 +222,15 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testSmallEnoughToInline() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -251,15 +251,15 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testTooBigToInline() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -280,16 +280,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testCollections() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -315,16 +315,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testAbsoluteUrl() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -341,16 +341,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testIndividualFiles() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -378,16 +378,16 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test adding and rendering assets.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::add
-	 * @covers Fisharebest\LaravelAssets\Assets::css
-	 * @covers Fisharebest\LaravelAssets\Assets::js
-	 * @covers Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers Fisharebest\LaravelAssets\Assets::hash
-	 * @covers Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+	 * @covers \Fisharebest\LaravelAssets\Assets::add
+	 * @covers \Fisharebest\LaravelAssets\Assets::css
+	 * @covers \Fisharebest\LaravelAssets\Assets::js
+	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+	 * @covers \Fisharebest\LaravelAssets\Assets::hash
+	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
 	 */
 	public function testRepeatable() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -415,8 +415,8 @@ class AssetsTest extends TestCase {
 	/**
 	 * Test purging old files.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::purge
-	 * @covers Fisharebest\LaravelAssets\Assets::needsPurge
+	 * @covers \Fisharebest\LaravelAssets\Assets::purge
+	 * @covers \Fisharebest\LaravelAssets\Assets::needsPurge
 	 */
 	public function testPurge() {
 		$filesystem = new Filesystem(new MemoryAdapter);

@@ -34,9 +34,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "enabled" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::isEnabled
-	 * @covers Fisharebest\LaravelAssets\Assets::setEnabled
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::isEnabled
+	 * @covers \Fisharebest\LaravelAssets\Assets::setEnabled
 	 */
 	public function testEnabled() {
 		$assets = $this->createDefaultAssets();
@@ -52,9 +52,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "css_source" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getCssSource
-	 * @covers Fisharebest\LaravelAssets\Assets::setCssSource
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getCssSource
+	 * @covers \Fisharebest\LaravelAssets\Assets::setCssSource
 	 */
 	public function testCssSource() {
 		$assets = $this->createDefaultAssets();
@@ -70,9 +70,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "js_source" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getJsSource
-	 * @covers Fisharebest\LaravelAssets\Assets::setJsSource
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getJsSource
+	 * @covers \Fisharebest\LaravelAssets\Assets::setJsSource
 	 */
 	public function testJsSource() {
 		$assets = $this->createDefaultAssets();
@@ -88,9 +88,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "destination" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getDestination
-	 * @covers Fisharebest\LaravelAssets\Assets::setDestination
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getDestination
+	 * @covers \Fisharebest\LaravelAssets\Assets::setDestination
 	 */
 	public function testDestination() {
 		$assets = $this->createDefaultAssets();
@@ -106,9 +106,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "destination_url" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getDestinationUrl
-	 * @covers Fisharebest\LaravelAssets\Assets::setDestinationUrl
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getDestinationUrl
+	 * @covers \Fisharebest\LaravelAssets\Assets::setDestinationUrl
 	 */
 	public function testDestinationUrl() {
 		$assets = $this->createDefaultAssets();
@@ -124,9 +124,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "css_filters" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getCssFilters
-	 * @covers Fisharebest\LaravelAssets\Assets::setCssFilters
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getCssFilters
+	 * @covers \Fisharebest\LaravelAssets\Assets::setCssFilters
 	 */
 	public function testCssFilters() {
 		$assets = $this->createDefaultAssets();
@@ -146,9 +146,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "js_filters" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getJsFilters
-	 * @covers Fisharebest\LaravelAssets\Assets::setJsFilters
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getJsFilters
+	 * @covers \Fisharebest\LaravelAssets\Assets::setJsFilters
 	 */
 	public function testJsFilters() {
 		$assets = $this->createDefaultAssets();
@@ -168,9 +168,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "loader" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getLoader
-	 * @covers Fisharebest\LaravelAssets\Assets::setLoader
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getLoader
+	 * @covers \Fisharebest\LaravelAssets\Assets::setLoader
 	 */
 	public function testLoader() {
 		$assets = $this->createDefaultAssets();
@@ -184,9 +184,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "notifiers" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getNotifiers
-	 * @covers Fisharebest\LaravelAssets\Assets::setNotifiers
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getNotifiers
+	 * @covers \Fisharebest\LaravelAssets\Assets::setNotifiers
 	 */
 	public function testNotifiers() {
 		$assets = $this->createDefaultAssets();
@@ -198,9 +198,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "inline_threshold" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getInlineThreshold
-	 * @covers Fisharebest\LaravelAssets\Assets::setInlineThreshold
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getInlineThreshold
+	 * @covers \Fisharebest\LaravelAssets\Assets::setInlineThreshold
 	 */
 	public function testInlineThreshold() {
 		$assets = $this->createDefaultAssets();
@@ -213,9 +213,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "gzip_static" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getGzipStatic
-	 * @covers Fisharebest\LaravelAssets\Assets::setGzipStatic
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getGzipStatic
+	 * @covers \Fisharebest\LaravelAssets\Assets::setGzipStatic
 	 */
 	public function testGzipStatic() {
 		$assets = $this->createDefaultAssets();
@@ -231,9 +231,9 @@ class ConfigurationTest extends TestCase {
 	/**
 	 * Test getting/setting the "collections" option.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::__construct
-	 * @covers Fisharebest\LaravelAssets\Assets::getCollections
-	 * @covers Fisharebest\LaravelAssets\Assets::setCollections
+	 * @covers \Fisharebest\LaravelAssets\Assets::__construct
+	 * @covers \Fisharebest\LaravelAssets\Assets::getCollections
+	 * @covers \Fisharebest\LaravelAssets\Assets::setCollections
 	 */
 	public function testCollections() {
 		$assets = $this->createDefaultAssets();

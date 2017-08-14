@@ -19,6 +19,7 @@
  */
 namespace Fisharebest\LaravelAssets\Tests\Commands;
 
+use Fisharebest\LaravelAssets\Assets;
 use Fisharebest\LaravelAssets\Commands\Purge;
 use Fisharebest\LaravelAssets\Tests\TestCase;
 use Mockery;
@@ -32,10 +33,10 @@ class PurgeTest extends TestCase {
 	/**
 	 * Test the purge command
 	 *
-	 * @covers Fisharebest\LaravelAssets\Commands\Purge
+	 * @covers \Fisharebest\LaravelAssets\Commands\Purge
 	 */
 	public function testPurgeCommandCallsPurgeFunction() {
-		$assets = Mockery::mock(\Fisharebest\LaravelAssets\Assets::class);
+		$assets = Mockery::mock(Assets::class);
 		$command = new Purge($assets);
 
 		$assets->shouldReceive('purge')->with($command);

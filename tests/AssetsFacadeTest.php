@@ -19,11 +19,7 @@
  */
 namespace Fisharebest\LaravelAssets\Tests;
 
-use Fisharebest\LaravelAssets\Assets;
 use Fisharebest\LaravelAssets\AssetsFacade;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Memory\MemoryAdapter;
-use Mockery;
 
 /**
  * @author    Greg Roach <fisharebest@gmail.com>
@@ -34,7 +30,7 @@ class AssetsFacadeTest extends TestCase {
 	/**
 	 * Test the facade.
 	 *
-	 * @covers Fisharebest\LaravelAssets\AssetsFacade
+	 * @covers \Fisharebest\LaravelAssets\AssetsFacade
 	 */
 	public function testFacade() {
 		AssetsFacade::setFacadeApplication(['assets' => 'SOMETHING']);

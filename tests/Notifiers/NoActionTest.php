@@ -30,7 +30,7 @@ class NoActionTest extends TestCase {
 	/**
 	 * Test the created command
 	 *
-	 * @covers Fisharebest\LaravelAssets\Notifiers\NoAction
+	 * @covers \Fisharebest\LaravelAssets\Notifiers\NoAction
 	 */
 	public function testNotifier() {
 		$notifier = new NoAction;

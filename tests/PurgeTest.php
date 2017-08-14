@@ -34,7 +34,7 @@ class PurgeTest extends TestCase {
 	/**
 	 * Test the purge command.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::purge
+	 * @covers \Fisharebest\LaravelAssets\Assets::purge
 	 */
 	public function testDeleteVerbose() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -55,7 +55,7 @@ class PurgeTest extends TestCase {
 	/**
 	 * Test the purge command.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::purge
+	 * @covers \Fisharebest\LaravelAssets\Assets::purge
 	 */
 	public function testDeleteSilent() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -76,7 +76,7 @@ class PurgeTest extends TestCase {
 	/**
 	 * Test the purge command.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::purge
+	 * @covers \Fisharebest\LaravelAssets\Assets::purge
 	 */
 	public function testRetainVerbose() {
 		$filesystem = new Filesystem(new MemoryAdapter);
@@ -97,7 +97,7 @@ class PurgeTest extends TestCase {
 	/**
 	 * Test the purge command.
 	 *
-	 * @covers Fisharebest\LaravelAssets\Assets::purge
+	 * @covers \Fisharebest\LaravelAssets\Assets::purge
 	 */
 	public function testRetainSilent() {
 		$filesystem = new Filesystem(new MemoryAdapter);

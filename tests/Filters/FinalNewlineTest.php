@@ -30,7 +30,7 @@ class FinalNewlineTest extends TestCase {
 	/**
 	 * Test the final-newline filter
 	 *
-	 * @covers Fisharebest\LaravelAssets\Filters\FinalNewline
+	 * @covers \Fisharebest\LaravelAssets\Filters\FinalNewline
 	 */
 	public function testFilter() {
 		$assets = $this->createDefaultAssets();

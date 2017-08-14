@@ -1,11 +1,11 @@
 language: php
 
 php:
+  - 7.2
   - 7.1
   - 7.0
   - 5.6
   - 5.5
-  - hhvm
 
 sudo: false
 
@@ -19,7 +19,7 @@ before_script:
   - composer update --no-interaction $PREFER_LOWEST
 
 script:
-  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - vendor/bin/phpunit
 
 after_script:
   - php vendor/bin/coveralls --verbose
