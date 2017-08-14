@@ -42,5 +42,15 @@
 		"files": [
 			"tests/shims.php"
 		]
+	},
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Fisharebest\\LaravelAssets\\AssetsServiceProvider"
+			],
+			"aliases": {
+				"Bar": "Fisharebest\\LaravelAssets\\AssetsFacade"
+			}
+		}
 	}
 }

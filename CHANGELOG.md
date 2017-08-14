@@ -3,6 +3,7 @@ CHANGELOG
 
 ## 1.6.0 (2017-08-14)
  - Fix #13 - Allow config to be serialized in `artisan config:cache`
+ - Support automatic package discovery for Laravel 5.5
 
 ## 1.5.2 (2017-07-31)
  - Merge #11 - recognise protocol-agnostic URLs

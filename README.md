@@ -10,17 +10,13 @@ Simple, flexible asset management for Laravel 5.  Combine and minify your CSS an
 
 ## Installation
 
-Add the dependency to `composer.json`, and then run `composer update`.
-
-```json
-{
-    "require": {
-        "fisharebest/laravel-assets": "~1.0",
-    },
-}
+Add the dependency to `composer.json`:
+ 
+```
+composer require fisharebest/laravel-assets
 ```
 
-Add the service provider and facade to `config/app.php`.
+Starting with Laravel 5.5, packages are discovered automatically.  For earlier versions, you must add the service provider and facade to `config/app.php`.
 
 ```php
 return [
