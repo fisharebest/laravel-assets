@@ -20,8 +20,11 @@
 namespace Fisharebest\LaravelAssets\Filters;
 
 use Fisharebest\LaravelAssets\Assets;
+use Fisharebest\LaravelAssets\SetStateTrait;
 
 class FinalNewline implements FilterInterface {
+	use SetStateTrait;
+
 	/**
 	 * Force files to have a trailing end-of-line character.
 	 *

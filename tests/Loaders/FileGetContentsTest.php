@@ -30,7 +30,7 @@ class FileGetContentsTest extends TestCase {
 	/**
 	 * Test the loadUrl command
 	 *
-	 * @covers \Fisharebest\LaravelAssets\Loaders\FileGetContents
+	 * @covers \Fisharebest\LaravelAssets\Loaders\FileGetContents::loadUrl
 	 */
 	public function testFilter() {
 		$loader = new FileGetContents;
@@ -39,5 +39,14 @@ class FileGetContentsTest extends TestCase {
 		$url  = 'https://raw.githubusercontent.com/fisharebest/laravel-assets/master/tests/data/styles.css';
 
 		$this->assertSame(file_get_contents($file), $loader->loadUrl($url));
+	}
+
+	/**
+	 * Test the object can be serialized and unserialized.
+	 *
+	 * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
+	 */
+	public function testIsSerializable() {
+		$this->assertInstanceOf(FileGetContents::class, FileGetContents::__set_state());
 	}
 }

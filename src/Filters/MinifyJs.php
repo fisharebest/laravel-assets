@@ -20,9 +20,12 @@
 namespace Fisharebest\LaravelAssets\Filters;
 
 use Fisharebest\LaravelAssets\Assets;
+use Fisharebest\LaravelAssets\SetStateTrait;
 use Minify\JS\JShrink;
 
 class MinifyJs implements FilterInterface {
+	use SetStateTrait;
+
 	/**
 	 * Reduce the size of JS files, using mrclay/minify compressor.
 	 *

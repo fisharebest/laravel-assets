@@ -30,12 +30,21 @@ class NoActionTest extends TestCase {
 	/**
 	 * Test the created command
 	 *
-	 * @covers \Fisharebest\LaravelAssets\Notifiers\NoAction
+	 * @covers \Fisharebest\LaravelAssets\Notifiers\NoAction::created
 	 */
 	public function testNotifier() {
 		$notifier = new NoAction;
 		$notifier->created(__DIR__ . '/../data/styles.css');
 
 		// Does nothing
+	}
+
+	/**
+	 * Test the object can be serialized and unserialized.
+	 *
+	 * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
+	 */
+	public function testIsSerializable() {
+		$this->assertInstanceOf(NoAction::class, NoAction::__set_state());
 	}
 }

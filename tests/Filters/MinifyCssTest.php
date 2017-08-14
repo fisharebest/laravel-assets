@@ -30,7 +30,7 @@ class MinifyCssTest extends TestCase {
 	/**
 	 * Test the filter MinifyCss
 	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyCss
+	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyCss::filter
 	 */
 	public function testFilter() {
 		$assets = $this->createDefaultAssets();
@@ -42,12 +42,21 @@ class MinifyCssTest extends TestCase {
 	/**
 	 * Test the filter MinifyCss
 	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyCss
+	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyCss::filter
 	 */
 	public function testAlreadyMinified() {
 		$assets = $this->createDefaultAssets();
 		$filter = new MinifyCss;
 
 		$this->assertSame("body {\n\tborder: 0px;\n}\n", $filter->filter("body {\n\tborder: 0px;\n}\n", 'test.min.css', $assets));
+	}
+
+	/**
+	 * Test the object can be serialized and unserialized.
+	 *
+	 * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
+	 */
+	public function testIsSerializable() {
+		$this->assertInstanceOf(MinifyCss::class, MinifyCss::__set_state());
 	}
 }

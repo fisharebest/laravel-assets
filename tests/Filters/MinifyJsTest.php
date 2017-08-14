@@ -30,7 +30,7 @@ class MinifyJsTest extends TestCase {
 	/**
 	 * Test the filter MinifyJS
 	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs
+	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs::filter
 	 */
 	public function testFilter() {
 		$assets = $this->createDefaultAssets();
@@ -42,12 +42,21 @@ class MinifyJsTest extends TestCase {
 	/**
 	 * Test the filter MinifyJS
 	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs
+	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs::filter
 	 */
 	public function testAlreadyMinified() {
 		$assets = $this->createDefaultAssets();
 		$filter = new MinifyJs;
 
 		$this->assertSame('var x = 123;', $filter->filter('var x = 123;', 'test.min.js', $assets));
+	}
+
+	/**
+	 * Test the object can be serialized and unserialized.
+	 *
+	 * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
+	 */
+	public function testIsSerializable() {
+		$this->assertInstanceOf(MinifyJs::class, MinifyJs::__set_state());
 	}
 }

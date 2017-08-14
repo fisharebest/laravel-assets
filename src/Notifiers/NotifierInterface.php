@@ -30,4 +30,11 @@ interface NotifierInterface {
 	 * @param string $asset The filename of the asset.
 	 */
 	public function created($asset);
+
+	/**
+	 * Allow the object to be serialized in laravel's config cache
+	 *
+	 * @return static
+	 */
+	public static function __set_state();
 }

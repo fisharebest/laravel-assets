@@ -30,7 +30,7 @@ class FinalNewlineTest extends TestCase {
 	/**
 	 * Test the final-newline filter
 	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\FinalNewline
+	 * @covers \Fisharebest\LaravelAssets\Filters\FinalNewline::filter
 	 */
 	public function testFilter() {
 		$assets = $this->createDefaultAssets();
@@ -39,5 +39,14 @@ class FinalNewlineTest extends TestCase {
 		$this->assertSame("test\n", $filter->filter('test', 'test.js', $assets));
 		$this->assertSame("test\n", $filter->filter("test\n", 'test.js', $assets));
 		$this->assertSame("test\r\n", $filter->filter("test\r", 'test.js', $assets));
+	}
+
+	/**
+	 * Test the object can be serialized and unserialized.
+	 *
+	 * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
+	 */
+	public function testIsSerializable() {
+		$this->assertInstanceOf(FinalNewline::class, FinalNewline::__set_state());
 	}
 }

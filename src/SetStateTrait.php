@@ -17,20 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace Fisharebest\LaravelAssets\Loaders;
+namespace Fisharebest\LaravelAssets;
 
-interface LoaderInterface {
-	/**
-	 * @param string $asset_url Load an asset from this URL.
-	 *
-	 * @return string
-	 */
-	public function loadUrl($asset_url);
-
+trait SetStateTrait {
 	/**
 	 * Allow the object to be serialized in laravel's config cache
 	 *
 	 * @return static
 	 */
-	public static function __set_state();
+	public static function __set_state() {
+		return new static;
+	}
 }

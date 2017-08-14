@@ -30,4 +30,11 @@ interface FilterInterface {
 	 * @return string
 	 */
 	public function filter($data, $asset_url, $assets);
+
+	/**
+	 * Allow the object to be serialized in laravel's config cache
+	 *
+	 * @return static
+	 */
+	public static function __set_state();
 }

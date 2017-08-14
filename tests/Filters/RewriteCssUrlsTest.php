@@ -30,7 +30,7 @@ class RewriteCssUrlsTest extends TestCase {
 	/**
 	 * Test the filter RewriteCssUrls
 	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\RewriteCssUrls
+	 * @covers \Fisharebest\LaravelAssets\Filters\RewriteCssUrls::filter
 	 */
 	public function testFilter() {
 		$assets = $this->createDefaultAssets();
@@ -46,12 +46,21 @@ class RewriteCssUrlsTest extends TestCase {
 	/**
 	 * Test the filter RewriteCssUrls
 	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\RewriteCssUrls
+	 * @covers \Fisharebest\LaravelAssets\Filters\RewriteCssUrls::filter
 	 */
 	public function testAbsoluteUrl() {
 		$assets = $this->createDefaultAssets();
 		$filter = new RewriteCssUrls;
 
 		$this->assertSame('body {background-image: url(http://example.com/foo.png);}', $filter->filter('body {background-image: url(foo.png);}', 'http://example.com/test.css', $assets));
+	}
+
+	/**
+	 * Test the object can be serialized and unserialized.
+	 *
+	 * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
+	 */
+	public function testIsSerializable() {
+		$this->assertInstanceOf(RewriteCssUrls::class, RewriteCssUrls::__set_state());
 	}
 }

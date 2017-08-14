@@ -20,8 +20,11 @@
 namespace Fisharebest\LaravelAssets\Filters;
 
 use Fisharebest\LaravelAssets\Assets;
+use Fisharebest\LaravelAssets\SetStateTrait;
 
 class RewriteCssUrls implements FilterInterface {
+	use SetStateTrait;
+
 	/**
 	 * Rewrite relative URLs in CSS files to take account of their new location.
 	 *

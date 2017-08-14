@@ -21,8 +21,11 @@ namespace Fisharebest\LaravelAssets\Filters;
 
 use CSSmin;
 use Fisharebest\LaravelAssets\Assets;
+use Fisharebest\LaravelAssets\SetStateTrait;
 
 class MinifyCss implements FilterInterface {
+	use SetStateTrait;
+
 	/**
 	 * Reduce the size of CSS files, using mrclay/minify compressor.
 	 *

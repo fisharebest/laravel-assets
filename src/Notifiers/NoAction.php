@@ -19,7 +19,11 @@
  */
 namespace Fisharebest\LaravelAssets\Notifiers;
 
+use Fisharebest\LaravelAssets\SetStateTrait;
+
 class NoAction implements NotifierInterface {
+	use SetStateTrait;
+
 	/**
 	 * This notifier doesn't actually do anything.
 	 * It's used by the unit tests.

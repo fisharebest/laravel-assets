@@ -19,7 +19,11 @@
  */
 namespace Fisharebest\LaravelAssets\Loaders;
 
+use Fisharebest\LaravelAssets\SetStateTrait;
+
 class FileGetContents implements LoaderInterface {
+	use SetStateTrait;
+
 	/**
 	 * Load external assets using PHP's built-in function.
 	 *
