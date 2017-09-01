@@ -49,7 +49,7 @@
 				"Fisharebest\\LaravelAssets\\AssetsServiceProvider"
 			],
 			"aliases": {
-				"Bar": "Fisharebest\\LaravelAssets\\AssetsFacade"
+				"Assets": "Fisharebest\\LaravelAssets\\AssetsFacade"
 			}
 		}
 	}
