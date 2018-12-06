@@ -26,37 +26,44 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
 
-class AssetsServiceProvider extends ServiceProvider {
-	/**
-	 * Perform post-registration booting of services.
-	 */
-	public function boot() {
-		// Allow artisan to publish our config file using the "vendor:publish" command.
-		$this->publishes([
-			__DIR__ . '/../config/assets.php' => config_path('assets.php'),
-		]);
-	}
+class AssetsServiceProvider extends ServiceProvider
+{
+    /**
+     * Perform post-registration booting of services.
+     */
+    public function boot()
+    {
+        // Allow artisan to publish our config file using the "vendor:publish" command.
+        $this->publishes([
+            __DIR__ . '/../config/assets.php' => config_path('assets.php'),
+        ]);
+    }
 
-	/**
-	 * Register bindings in the container.
-	 */
-	public function register() {
-		// Merge our default configuration.
-		$this->mergeConfigFrom(__DIR__ . '/../config/assets.php', 'assets');
+    /**
+     * Register bindings in the container.
+     */
+    public function register()
+    {
+        // Merge our default configuration.
+        $this->mergeConfigFrom(__DIR__ . '/../config/assets.php', 'assets');
 
-		// Bind our component into the IoC container.
-		$this->app->singleton('assets', function($app) {
-			$filesystem = new Filesystem(new Local(public_path()), ['visibility' => AdapterInterface::VISIBILITY_PUBLIC]);
+        // Bind our component into the IoC container.
+        $this->app->singleton('assets', function ($app) {
+            $config = [
+                'visibility' => AdapterInterface::VISIBILITY_PUBLIC,
+            ];
 
-			return new Assets($app['config']['assets'], $filesystem);
-		});
+            $filesystem = new Filesystem(new Local(public_path()), $config);
 
-		// Command-line functions
-		// Don't use array access here - it is hard to mock / unit-test.  Use bind() and make() instead.
-		$this->app->bind('command.assets.purge', function(Application $app) {
-			return new Purge($app->make('assets'));
-		});
+            return new Assets($app['config']['assets'], $filesystem);
+        });
 
-		$this->commands(['command.assets.purge']);
-	}
+        // Command-line functions
+        // Don't use array access here - it is hard to mock / unit-test.  Use bind() and make() instead.
+        $this->app->bind('command.assets.purge', function (Application $app) {
+            return new Purge($app->make('assets'));
+        });
+
+        $this->commands(['command.assets.purge']);
+    }
 }

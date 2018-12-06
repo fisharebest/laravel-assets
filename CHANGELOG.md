@@ -5,6 +5,7 @@ CHANGELOG
  - Update to latest version of CSS minifier
  - Add PHP 7.2, 7.3, 7.4 to the test matrix
  - Remove support for PHP 5.5
+ - Apply PSR12 coding standard
 
 ## 1.6.1 (2017-09-01)
  - Fix: Support automatic package discovery for Laravel 5.5

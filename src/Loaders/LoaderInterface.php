@@ -19,18 +19,19 @@
  */
 namespace Fisharebest\LaravelAssets\Loaders;
 
-interface LoaderInterface {
-	/**
-	 * @param string $asset_url Load an asset from this URL.
-	 *
-	 * @return string
-	 */
-	public function loadUrl($asset_url);
+interface LoaderInterface
+{
+    /**
+     * @param string $asset_url Load an asset from this URL.
+     *
+     * @return string
+     */
+    public function loadUrl($asset_url);
 
-	/**
-	 * Allow the object to be serialized in laravel's config cache
-	 *
-	 * @return static
-	 */
-	public static function __set_state();
+    /**
+     * Allow the object to be serialized in laravel's config cache
+     *
+     * @return static
+     */
+    public static function __set_state();
 }

@@ -19,13 +19,15 @@
  */
 namespace Fisharebest\LaravelAssets;
 
-trait SetStateTrait {
-	/**
-	 * Allow the object to be serialized in laravel's config cache
-	 *
-	 * @return static
-	 */
-	public static function __set_state() {
-		return new static;
-	}
+trait SetStateTrait
+{
+    /**
+     * Allow the object to be serialized in laravel's config cache
+     *
+     * @return static
+     */
+    public static function __set_state()
+    {
+        return new static();
+    }
 }
