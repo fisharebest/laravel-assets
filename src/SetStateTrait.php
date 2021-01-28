@@ -26,7 +26,7 @@ trait SetStateTrait
      *
      * @return static
      */
-    public static function __set_state()
+    public static function __set_state( array $properties = [] )
     {
         return new static();
     }
