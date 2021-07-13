@@ -2,7 +2,7 @@
 /**
  * laravel-assets: asset management for Laravel 5
  *
- * Copyright (c) 2017 Greg Roach
+ * Copyright (c) 2021 Greg Roach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,48 +15,53 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 namespace Fisharebest\LaravelAssets\Tests;
 
 use Fisharebest\LaravelAssets\Filters\MinifyJs;
 
 /**
- * @author    Greg Roach <fisharebest@gmail.com>
- * @copyright (c) 2017 Greg Roach
- * @license   GPLv3+
+ * @author        Greg Roach <fisharebest@gmail.com>
+ * @copyright (c) 2021 Greg Roach
+ * @license       GPLv3+
  */
-class MinifyJsTest extends TestCase {
-	/**
-	 * Test the filter MinifyJS
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs::filter
-	 */
-	public function testFilter() {
-		$assets = $this->createDefaultAssets();
-		$filter = new MinifyJs;
+class MinifyJsTest extends TestCase
+{
+    /**
+     * Test the filter MinifyJS
+     *
+     * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs::filter
+     */
+    public function testFilter()
+    {
+        $assets = $this->createDefaultAssets();
+        $filter = new MinifyJs;
 
-		$this->assertSame('var x=123;', $filter->filter('var x = 123;', 'test.js', $assets));
-	}
+        $this->assertSame('var x=123;', $filter->filter('var x = 123;', 'test.js', $assets));
+    }
 
-	/**
-	 * Test the filter MinifyJS
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs::filter
-	 */
-	public function testAlreadyMinified() {
-		$assets = $this->createDefaultAssets();
-		$filter = new MinifyJs;
+    /**
+     * Test the filter MinifyJS
+     *
+     * @covers \Fisharebest\LaravelAssets\Filters\MinifyJs::filter
+     */
+    public function testAlreadyMinified()
+    {
+        $assets = $this->createDefaultAssets();
+        $filter = new MinifyJs;
 
-		$this->assertSame('var x = 123;', $filter->filter('var x = 123;', 'test.min.js', $assets));
-	}
+        $this->assertSame('var x = 123;', $filter->filter('var x = 123;', 'test.min.js', $assets));
+    }
 
-	/**
-	 * Test the object can be serialized and unserialized.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
-	 */
-	public function testIsSerializable() {
-		$this->assertInstanceOf(MinifyJs::class, MinifyJs::__set_state());
-	}
+    /**
+     * Test the object can be serialized and unserialized.
+     *
+     * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
+     */
+    public function testIsSerializable()
+    {
+        $this->assertInstanceOf(MinifyJs::class, MinifyJs::__set_state([]));
+    }
 }

@@ -2,7 +2,7 @@
 /**
  * laravel-assets: asset management for Laravel 5
  *
- * Copyright (c) 2017 Greg Roach
+ * Copyright (c) 2021 Greg Roach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,428 +15,452 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 namespace Fisharebest\LaravelAssets\Tests;
 
 use Fisharebest\LaravelAssets\Assets;
 use Fisharebest\LaravelAssets\Commands\Purge;
 use Fisharebest\LaravelAssets\Notifiers\NotifierInterface;
+use InvalidArgumentException;
+use League\Flysystem\FileExistsException;
+use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
-use Mockery;
 
 /**
- * @author    Greg Roach <fisharebest@gmail.com>
- * @copyright (c) 2017 Greg Roach
- * @license   GPLv3+
+ * @author        Greg Roach <greg@subaqua.co.uk>
+ * @copyright (c) 2021 Greg Roach
+ * @license       GPLv3+
  */
-class AssetsTest extends TestCase {
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testEmpty() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+class AssetsTest extends TestCase
+{
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     * @throws FileExistsException
+     * @throws FileNotFoundException
+     */
+    public function testEmpty()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$this->assertSame('d41d8cd98f00b204e9800998ecf8427e', md5(''));
+        $this->assertSame('d41d8cd98f00b204e9800998ecf8427e', md5(''));
 
-		$this->assertSame('<link rel="stylesheet" href="min/d41d8cd98f00b204e9800998ecf8427e.min.css">', $assets->css());
-		$this->assertSame('<script src="min/d41d8cd98f00b204e9800998ecf8427e.min.js"></script>', $assets->js());
+        $this->assertSame('<link rel="stylesheet" href="min/d41d8cd98f00b204e9800998ecf8427e.min.css">', $assets->css());
+        $this->assertSame('<script src="min/d41d8cd98f00b204e9800998ecf8427e.min.js"></script>', $assets->js());
 
-		$this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.css'));
-		$this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.css'));
-		$this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.js'));
-		$this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.js'));
+        $this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.css'));
+        $this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.css'));
+        $this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.js'));
+        $this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.js'));
 
-		$this->assertFalse($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.css.gz'));
-		$this->assertFalse($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.css.gz'));
-		$this->assertFalse($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.js.gz'));
-		$this->assertFalse($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.js.gz'));
+        $this->assertFalse($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.css.gz'));
+        $this->assertFalse($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.css.gz'));
+        $this->assertFalse($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.js.gz'));
+        $this->assertFalse($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.js.gz'));
 
-		$this->assertSame('', $filesystem->read('min/d41d8cd98f00b204e9800998ecf8427e.css'));
-		$this->assertSame('', $filesystem->read('min/d41d8cd98f00b204e9800998ecf8427e.min.css'));
-		$this->assertSame('', $filesystem->read('min/d41d8cd98f00b204e9800998ecf8427e.js'));
-		$this->assertSame('', $filesystem->read('min/d41d8cd98f00b204e9800998ecf8427e.min.js'));
-	}
+        $this->assertSame('', $filesystem->read('min/d41d8cd98f00b204e9800998ecf8427e.css'));
+        $this->assertSame('', $filesystem->read('min/d41d8cd98f00b204e9800998ecf8427e.min.css'));
+        $this->assertSame('', $filesystem->read('min/d41d8cd98f00b204e9800998ecf8427e.js'));
+        $this->assertSame('', $filesystem->read('min/d41d8cd98f00b204e9800998ecf8427e.min.js'));
+    }
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 *
-	 * @expectedException        \InvalidArgumentException
-	 * @expectedExceptionMessage Unknown asset type: foo!
-	 */
-	public function testInvalid() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testInvalid()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown asset type: foo!');
 
-		$assets->add('foo!');
-	}
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testAttributes() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $assets->add('foo!');
+    }
 
-		$this->assertSame('<link media="print" rel="stylesheet" href="min/d41d8cd98f00b204e9800998ecf8427e.min.css">', $assets->css(null, ['media' => 'print']));
-		$this->assertSame('<script async src="min/d41d8cd98f00b204e9800998ecf8427e.min.js"></script>', $assets->js(null, ['async']));
-	}
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testAttributes()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testDestinationUrl() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $this->assertSame('<link media="print" rel="stylesheet" href="min/d41d8cd98f00b204e9800998ecf8427e.min.css">', $assets->css(null, ['media' => 'print']));
+        $this->assertSame('<script async src="min/d41d8cd98f00b204e9800998ecf8427e.min.js"></script>', $assets->js(null, ['async']));
+    }
 
-		$assets->setDestinationUrl('http://example.com');
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testDestinationUrl()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$this->assertSame('<link rel="stylesheet" href="http://example.com/d41d8cd98f00b204e9800998ecf8427e.min.css">', $assets->css());
-		$this->assertSame('<script src="http://example.com/d41d8cd98f00b204e9800998ecf8427e.min.js"></script>', $assets->js());
-	}
+        $assets->setDestinationUrl('http://example.com');
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testGzip() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $this->assertSame('<link rel="stylesheet" href="http://example.com/d41d8cd98f00b204e9800998ecf8427e.min.css">', $assets->css());
+        $this->assertSame('<script src="http://example.com/d41d8cd98f00b204e9800998ecf8427e.min.js"></script>', $assets->js());
+    }
 
-		$assets->setGzipStatic(true);
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testGzip()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$assets->css();
-		$assets->js();
+        $assets->setGzipStatic(true);
 
-		$this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.css.gz'));
-		$this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.js.gz'));
-	}
+        $assets->css();
+        $assets->js();
 
-	/**
-	 * Test the notification hooks.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 */
-	public function testNotifiers() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.css.gz'));
+        $this->assertTrue($filesystem->has('min/d41d8cd98f00b204e9800998ecf8427e.min.js.gz'));
+    }
 
-		$notifier = Mockery::mock(NotifierInterface::class);
-		$notifier->shouldReceive('created')->with('min/d41d8cd98f00b204e9800998ecf8427e.min.css');
+    /**
+     * Test the notification hooks.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     */
+    public function testNotifiers()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$assets->setNotifiers([$notifier]);
-		$assets->css();
-	}
+        $notifier = $this->createMock(NotifierInterface::class);
+        $notifier
+            ->expects($this->once())
+            ->method('created')
+            ->with('min/d41d8cd98f00b204e9800998ecf8427e.min.css');
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testAdd() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $assets->setNotifiers([$notifier]);
+        $assets->css();
+    }
 
-		$assets->add(['style1.css', 'style2.css']);
-		$assets->add('script.js');
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testAdd()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$filesystem->write('css/style1.css', 'foo');
-		$filesystem->write('css/style2.css', 'bar');
-		$filesystem->write('js/script.js', 'baz');
+        $assets->add(['style1.css', 'style2.css']);
+        $assets->add('script.js');
 
-		$css = $assets->css();
-		$js  = $assets->js();
+        $filesystem->write('css/style1.css', 'foo');
+        $filesystem->write('css/style2.css', 'bar');
+        $filesystem->write('js/script.js', 'baz');
 
-		$this->assertSame(1, preg_match_all('/href="([^"]+)"/', $css, $matches));
-		$this->assertTrue($filesystem->has($matches[1][0]));
+        $css = $assets->css();
+        $js  = $assets->js();
 
-		$this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
-		$this->assertTrue($filesystem->has($matches[1][0]));
-	}
+        $this->assertSame(1, preg_match_all('/href="([^"]+)"/', $css, $matches));
+        $this->assertTrue($filesystem->has($matches[1][0]));
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testSmallEnoughToInline() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
-		$assets->setInlineThreshold(1024);
+        $this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
+        $this->assertTrue($filesystem->has($matches[1][0]));
+    }
 
-		$assets->add(['style1.css', 'style2.css']);
-		$assets->add('script.js');
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testSmallEnoughToInline()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $assets->setInlineThreshold(1024);
 
-		$filesystem->write('css/style1.css', 'p {color: red;}');
-		$filesystem->write('css/style2.css', 'div {color: blue;}');
-		$filesystem->write('js/script.js', 'var x=1');
+        $assets->add(['style1.css', 'style2.css']);
+        $assets->add('script.js');
 
-		$this->assertSame('<style>p{color:red}div{color:blue}</style>', $assets->css());
-		$this->assertSame('<script>var x=1</script>', $assets->js());
-	}
+        $filesystem->write('css/style1.css', 'p {color: red;}');
+        $filesystem->write('css/style2.css', 'div {color: blue;}');
+        $filesystem->write('js/script.js', 'var x=1');
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testTooBigToInline() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
-		$assets->setInlineThreshold(4);
+        $this->assertSame('<style>p{color:red}div{color:blue}</style>', $assets->css());
+        $this->assertSame('<script>var x=1</script>', $assets->js());
+    }
 
-		$assets->add(['style1.css', 'style2.css']);
-		$assets->add('script.js');
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testTooBigToInline()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $assets->setInlineThreshold(4);
 
-		$filesystem->write('css/style1.css', 'p {color: red;}');
-		$filesystem->write('css/style2.css', 'div {color: blue;}');
-		$filesystem->write('js/script.js', 'var x=1');
+        $assets->add(['style1.css', 'style2.css']);
+        $assets->add('script.js');
 
-		$this->assertNotFalse(preg_match('/link rel="stylesheet"/', $assets->css()));
-		$this->assertNotFalse(preg_match('/<script src=/', $assets->js()));
-	}
+        $filesystem->write('css/style1.css', 'p {color: red;}');
+        $filesystem->write('css/style2.css', 'div {color: blue;}');
+        $filesystem->write('js/script.js', 'var x=1');
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testCollections() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $this->assertNotFalse(preg_match('/link rel="stylesheet"/', $assets->css()));
+        $this->assertNotFalse(preg_match('/<script src=/', $assets->js()));
+    }
 
-		$assets->setCollections(['coll' => ['style1.css', 'style2.css', 'script.js']]);
-		$assets->add('coll');
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testCollections()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$filesystem->write('css/style1.css', 'foo');
-		$filesystem->write('css/style2.css', 'bar');
-		$filesystem->write('js/script.js', 'baz');
+        $assets->setCollections(['coll' => ['style1.css', 'style2.css', 'script.js']]);
+        $assets->add('coll');
 
-		$css = $assets->css();
-		$js  = $assets->js();
+        $filesystem->write('css/style1.css', 'foo');
+        $filesystem->write('css/style2.css', 'bar');
+        $filesystem->write('js/script.js', 'baz');
 
-		$this->assertSame(1, preg_match_all('/href="([^"]+)"/', $css, $matches));
-		$this->assertTrue($filesystem->has($matches[1][0]));
+        $css = $assets->css();
+        $js  = $assets->js();
 
-		$this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
-		$this->assertTrue($filesystem->has($matches[1][0]));
-	}
+        $this->assertSame(1, preg_match_all('/href="([^"]+)"/', $css, $matches));
+        $this->assertTrue($filesystem->has($matches[1][0]));
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testAbsoluteUrl() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
+        $this->assertTrue($filesystem->has($matches[1][0]));
+    }
 
-		$assets->add('jquery');
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testAbsoluteUrl()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$js  = $assets->js();
+        $assets->add('jquery');
 
-		$this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
-		$this->assertTrue($filesystem->has($matches[1][0]));
-	}
+        $js = $assets->js();
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testIndividualFiles() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
+        $this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
+        $this->assertTrue($filesystem->has($matches[1][0]));
+    }
 
-		$assets->setEnabled(false);
-		$assets->add(['style1.css', 'style2.css']);
-		$assets->add('script.js');
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testIndividualFiles()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets     = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$filesystem->write('css/style1.css', 'foo');
-		$filesystem->write('css/style2.css', 'bar');
-		$filesystem->write('js/script.js', 'baz');
+        $assets->setEnabled(false);
+        $assets->add(['style1.css', 'style2.css']);
+        $assets->add('script.js');
 
-		$css = $assets->css();
-		$js  = $assets->js();
+        $filesystem->write('css/style1.css', 'foo');
+        $filesystem->write('css/style2.css', 'bar');
+        $filesystem->write('js/script.js', 'baz');
 
-		$this->assertSame(2, preg_match_all('/href="([^"]+)"/', $css, $matches));
-		$this->assertTrue($filesystem->has($matches[1][0]));
-		$this->assertTrue($filesystem->has($matches[1][1]));
+        $css = $assets->css();
+        $js  = $assets->js();
 
-		$this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
-		$this->assertTrue($filesystem->has($matches[1][0]));
-	}
+        $this->assertSame(2, preg_match_all('/href="([^"]+)"/', $css, $matches));
+        $this->assertTrue($filesystem->has($matches[1][0]));
+        $this->assertTrue($filesystem->has($matches[1][1]));
 
-	/**
-	 * Test adding and rendering assets.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::add
-	 * @covers \Fisharebest\LaravelAssets\Assets::css
-	 * @covers \Fisharebest\LaravelAssets\Assets::js
-	 * @covers \Fisharebest\LaravelAssets\Assets::processAssets
-	 * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
-	 * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
-	 * @covers \Fisharebest\LaravelAssets\Assets::hash
-	 * @covers \Fisharebest\LaravelAssets\Assets::createGzip
-	 * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
-	 * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
-	 */
-	public function testRepeatable() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets1    = new Assets($this->defaultConfiguration(), $filesystem);
-		$assets2    = new Assets($this->defaultConfiguration(), $filesystem);
+        $this->assertSame(1, preg_match_all('/src="([^"]+)"/', $js, $matches));
+        $this->assertTrue($filesystem->has($matches[1][0]));
+    }
 
-		$assets1->add(['style1.css', 'style2.css']);
-		$assets1->add('script.js');
-		$assets2->add(['style1.css', 'style2.css']);
-		$assets2->add('script.js');
+    /**
+     * Test adding and rendering assets.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::add
+     * @covers \Fisharebest\LaravelAssets\Assets::css
+     * @covers \Fisharebest\LaravelAssets\Assets::js
+     * @covers \Fisharebest\LaravelAssets\Assets::processAssets
+     * @covers \Fisharebest\LaravelAssets\Assets::checkGroupExists
+     * @covers \Fisharebest\LaravelAssets\Assets::concatenateFiles
+     * @covers \Fisharebest\LaravelAssets\Assets::hash
+     * @covers \Fisharebest\LaravelAssets\Assets::createGzip
+     * @covers \Fisharebest\LaravelAssets\Assets::htmlLinks
+     * @covers \Fisharebest\LaravelAssets\Assets::convertAttributesToHtml
+     */
+    public function testRepeatable()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $assets1    = new Assets($this->defaultConfiguration(), $filesystem);
+        $assets2    = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$filesystem->write('css/style1.css', 'foo');
-		$filesystem->write('css/style2.css', 'bar');
-		$filesystem->write('js/script.js', 'baz');
+        $assets1->add(['style1.css', 'style2.css']);
+        $assets1->add('script.js');
+        $assets2->add(['style1.css', 'style2.css']);
+        $assets2->add('script.js');
 
-		$css1 = $assets1->css();
-		$js1  = $assets1->js();
-		$css2 = $assets2->css();
-		$js2  = $assets2->js();
+        $filesystem->write('css/style1.css', 'foo');
+        $filesystem->write('css/style2.css', 'bar');
+        $filesystem->write('js/script.js', 'baz');
 
-		$this->assertSame($css1, $css2);
-		$this->assertSame($js1, $js2);
-	}
+        $css1 = $assets1->css();
+        $js1  = $assets1->js();
+        $css2 = $assets2->css();
+        $js2  = $assets2->js();
 
-	/**
-	 * Test purging old files.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::purge
-	 * @covers \Fisharebest\LaravelAssets\Assets::needsPurge
-	 */
-	public function testPurge() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$filesystem->write('min/style.css', 'foo');
-		$filesystem->write('min/script.js', 'bar');
-		$filesystem->write('min/.gitignore', 'baz');
+        $this->assertSame($css1, $css2);
+        $this->assertSame($js1, $js2);
+    }
 
-		$assets = new Assets($this->defaultConfiguration(), $filesystem);
+    /**
+     * Test purging old files.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::purge
+     * @covers \Fisharebest\LaravelAssets\Assets::needsPurge
+     */
+    public function testPurge()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem->write('min/style.css', 'foo');
+        $filesystem->write('min/script.js', 'bar');
+        $filesystem->write('min/.gitignore', 'baz');
 
-		$command = Mockery::mock(Purge::class);
-		$command->shouldReceive('option')->with('days');
-		$command->shouldReceive('option')->with('verbose');
-		$command->shouldReceive('info')->with('Deleted: min/style.css');
-		$command->shouldReceive('info')->with('Deleted: min/script.js');
-		$command->shouldReceive('info')->with('Keeping: min/.gitignore');
+        $assets = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$assets->purge($command);
+        $command = $this->createMock(Purge::class);
+        $command
+            ->method('option')
+            ->withConsecutive(['days'], ['verbose']);
+        $command
+            ->method('info')
+            ->withConsecutive(['Deleted: min/script.js'], ['Deleted: min/style.css'], ['Keeping: min/.gitignore']);
 
-		$this->assertFalse($filesystem->has('min/style.css'));
-		$this->assertFalse($filesystem->has('min/script.js'));
-		$this->assertTrue($filesystem->has('min/.gitignore'));
-	}
+        $assets->purge($command);
+
+        $this->assertFalse($filesystem->has('min/style.css'));
+        $this->assertFalse($filesystem->has('min/script.js'));
+        $this->assertTrue($filesystem->has('min/.gitignore'));
+    }
 }

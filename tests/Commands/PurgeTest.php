@@ -2,7 +2,7 @@
 /**
  * laravel-assets: asset management for Laravel 5
  *
- * Copyright (c) 2017 Greg Roach
+ * Copyright (c) 2021 Greg Roach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,34 +15,37 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 namespace Fisharebest\LaravelAssets\Tests\Commands;
 
 use Fisharebest\LaravelAssets\Assets;
 use Fisharebest\LaravelAssets\Commands\Purge;
 use Fisharebest\LaravelAssets\Tests\TestCase;
-use Mockery;
 
 /**
- * @author    Greg Roach <fisharebest@gmail.com>
- * @copyright (c) 2017 Greg Roach
- * @license   GPLv3+
+ * @author        Greg Roach <fisharebest@gmail.com>
+ * @copyright (c) 2021 Greg Roach
+ * @license       GPLv3+
  */
-class PurgeTest extends TestCase {
-	/**
-	 * Test the purge command
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Commands\Purge
-	 */
-	public function testPurgeCommandCallsPurgeFunction() {
-		$assets = Mockery::mock(Assets::class);
-		$command = new Purge($assets);
+class PurgeTest extends TestCase
+{
+    /**
+     * Test the purge command
+     *
+     * @covers \Fisharebest\LaravelAssets\Commands\Purge
+     */
+    public function testPurgeCommandCallsPurgeFunction()
+    {
+        $assets  = $this->createMock(Assets::class);
+        $command = new Purge($assets);
 
-		$assets->shouldReceive('purge')->with($command);
+        $assets
+            ->expects($this->once())
+            ->method('purge')
+            ->with($command);
 
-		$command->handle();
-
-		$this->assertTrue(true);
-	}
+        $command->handle();
+    }
 }

@@ -2,7 +2,7 @@
 /**
  * laravel-assets: asset management for Laravel 5
  *
- * Copyright (c) 2017 Greg Roach
+ * Copyright (c) 2021 Greg Roach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,9 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 namespace Fisharebest\LaravelAssets;
 
 use Fisharebest\LaravelAssets\Commands\Purge;
@@ -24,6 +25,8 @@ use Fisharebest\LaravelAssets\Filters\FilterInterface;
 use Fisharebest\LaravelAssets\Loaders\LoaderInterface;
 use Fisharebest\LaravelAssets\Notifiers\NotifierInterface;
 use InvalidArgumentException;
+use League\Flysystem\FileExistsException;
+use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
 
 class Assets
@@ -376,7 +379,7 @@ class Assets
      */
     public function setEnabled($enabled)
     {
-        $this->enabled = (bool) $enabled;
+        $this->enabled = (bool)$enabled;
 
         return $this;
     }
@@ -396,7 +399,7 @@ class Assets
      */
     public function setInlineThreshold($inline_threshold)
     {
-        $this->inline_threshold = (int) $inline_threshold;
+        $this->inline_threshold = (int)$inline_threshold;
 
         return $this;
     }
@@ -416,7 +419,7 @@ class Assets
      */
     public function setGzipStatic($gzip_static)
     {
-        $this->gzip_static = (int) $gzip_static;
+        $this->gzip_static = (int)$gzip_static;
 
         return $this;
     }
@@ -467,11 +470,11 @@ class Assets
                 $this->add($a, $type, $group);
             }
         } elseif ($type === self::TYPE_CSS || $type === self::TYPE_AUTO && preg_match(self::REGEX_CSS, $asset)) {
-            if (!in_array($asset, $this->css_assets[$group])) {
+            if (!in_array($asset, $this->css_assets[$group], true)) {
                 $this->css_assets[$group][] = $asset;
             }
         } elseif ($type === self::TYPE_JS || $type === self::TYPE_AUTO && preg_match(self::REGEX_JS, $asset)) {
-            if (!in_array($asset, $this->js_assets[$group])) {
+            if (!in_array($asset, $this->js_assets[$group], true)) {
                 $this->js_assets[$group][] = $asset;
             }
         } elseif (array_key_exists($asset, $this->collections)) {
@@ -490,6 +493,8 @@ class Assets
      * @param string[] $attributes Optional attributes, such as ['media' => 'print']
      *
      * @return string
+     * @throws FileExistsException
+     * @throws FileNotFoundException
      */
     public function css($group = self::GROUP_DEFAULT, array $attributes = [])
     {
@@ -513,6 +518,8 @@ class Assets
      * @param string[] $attributes Optional attributes, such as ['async']
      *
      * @return string
+     * @throws FileExistsException
+     * @throws FileNotFoundException
      */
     public function js($group = self::GROUP_DEFAULT, array $attributes = [])
     {
@@ -527,189 +534,6 @@ class Assets
             self::FORMAT_JS_LINK,
             self::FORMAT_JS_INLINE
         );
-    }
-
-    /**
-     * Render markup to load the CSS or JS assets.
-     *
-     * @param string[]          $attributes    Optional attributes, such as ['async']
-     * @param string[]          $assets        The files to be processed
-     * @param string            $extension     ".css" or ".js"
-     * @param string            $source_dir    The folder containing the source assets
-     * @param FilterInterface[] $filters       How to process these assets
-     * @param string            $format_link   Template for an HTML link to the asset
-     * @param string            $format_inline Template for an inline asset
-     *
-     * @return string
-     */
-    private function processAssets(
-        array $attributes,
-        array $assets,
-        $extension,
-        $source_dir,
-        $filters,
-        $format_link,
-        $format_inline
-    ) {
-        $hashes = [];
-        $path   = $this->getDestination();
-
-        foreach ($assets as $asset) {
-            if ($this->isAbsoluteUrl($asset)) {
-                $hash = $this->hash($asset);
-            } else {
-                $hash = $this->hash($asset . $this->public->getTimestamp($source_dir . '/' . $asset));
-            }
-            if (!$this->public->has($path . '/' . $hash . $extension)) {
-                if ($this->isAbsoluteUrl($asset)) {
-                    $data = $this->getLoader()->loadUrl($asset);
-                } else {
-                    $data = $this->public->read($source_dir . '/' . $asset);
-                }
-                foreach ($filters as $filter) {
-                    $data = $filter->filter($data, $asset, $this);
-                }
-                $this->public->write($path . '/' . $hash . $extension, $data);
-                $this->public->write($path . '/' . $hash . '.min' . $extension, $data);
-            }
-            $hashes[] = $hash;
-        }
-
-        // The file name of our pipelined asset.
-        $hash       = $this->hash(implode('', $hashes));
-        $asset_file = $path . '/' . $hash . '.min' . $extension;
-
-        $this->concatenateFiles($path, $hashes, $hash, $extension);
-        $this->concatenateFiles($path, $hashes, $hash, '.min' . $extension);
-
-        $this->createGzip($asset_file);
-
-        foreach ($this->notifiers as $notifier) {
-            $notifier->created($asset_file);
-        }
-
-        if ($this->getDestinationUrl() === '') {
-            $url = url($path);
-        } else {
-            $url = $this->getDestinationUrl();
-        }
-
-        if ($this->isEnabled()) {
-            $inline_threshold = $this->getInlineThreshold();
-            if ($inline_threshold > 0 && $this->public->getSize($asset_file) <= $inline_threshold) {
-                return sprintf($format_inline, $this->public->read($asset_file));
-            } else {
-                return $this->htmlLinks($url, [$hash], '.min' . $extension, $format_link, $attributes);
-            }
-        } else {
-            return $this->htmlLinks($url, $hashes, $extension, $format_link, $attributes);
-        }
-    }
-
-    /**
-     * Make sure that the specified group (i.e. array key) exists.
-     *
-     * @param string $group
-     */
-    private function checkGroupExists($group)
-    {
-        if (!array_key_exists($group, $this->css_assets)) {
-            $this->css_assets[$group] = [];
-        }
-        if (!array_key_exists($group, $this->js_assets)) {
-            $this->js_assets[$group] = [];
-        }
-    }
-
-    /**
-     * Concatenate a number of files.
-     *
-     * @param string   $path        subfolder containing assets to be combined
-     * @param string[] $sources     Filenames (without extension) to be combined
-     * @param string   $destination Filename (without extension) to be created
-     * @param string   $extension   ".css", ".min.js", etc.
-     */
-    private function concatenateFiles($path, $sources, $destination, $extension)
-    {
-        if (!$this->public->has($path . '/' . $destination . $extension)) {
-            $data = '';
-            foreach ($sources as $source) {
-                $data .= $this->public->read($path . '/' . $source . $extension);
-            }
-            $this->public->write($path . '/' . $destination . $extension, $data);
-        }
-    }
-
-    /**
-     * Generate a hash, to use as a filename for generated assets.
-     *
-     * @param string $text
-     *
-     * @return string
-     */
-    private function hash($text)
-    {
-        return md5($text);
-    }
-
-    /**
-     * Optionally create a .gz version of a file - to support the NGINX gzip_static option.
-     *
-     * @param string $path
-     */
-    private function createGzip($path)
-    {
-        $gzip = $this->getGzipStatic();
-
-        if ($gzip >= 1 && $gzip <= 9 && function_exists('gzcompress') && !$this->public->has($path . '.gz')) {
-            $content    = $this->public->read($path);
-            $content_gz = gzcompress($content, $gzip);
-            $this->public->write($path . '.gz', $content_gz);
-        }
-    }
-
-    /**
-     * Generate HTML links to a list of processed asset files.
-     *
-     * @param string   $url       path to the assets
-     * @param string[] $hashes    base filename
-     * @param string   $extension ".css", ".min.js", etc.
-     * @param string   $format
-     * @param string[] $attributes
-     *
-     * @return string
-     */
-    private function htmlLinks($url, $hashes, $extension, $format, $attributes)
-    {
-        $html_attributes = $this->convertAttributesToHtml($attributes);
-
-        $html_links = '';
-        foreach ($hashes as $asset) {
-            $html_links .= sprintf($format, $html_attributes, $url . '/' . $asset . $extension);
-        }
-
-        return $html_links;
-    }
-
-    /**
-     * Convert an array of attributes to HTML.
-     *
-     * @param string[] $attributes
-     *
-     * @return string
-     */
-    private function convertAttributesToHtml(array $attributes)
-    {
-        $html = '';
-        foreach ($attributes as $key => $value) {
-            if (is_int($key)) {
-                $html .= ' ' . $value;
-            } else {
-                $html .= ' ' . $key . '="' . $value . '"';
-            }
-        }
-
-        return $html;
     }
 
     /**
@@ -776,11 +600,13 @@ class Assets
      * Purge generated assets older than a given number of days
      *
      * @param Purge $command
+     *
+     * @throws FileNotFoundException
      */
     public function purge(Purge $command)
     {
-        $days      = (int) $command->option('days');
-        $verbose   = (bool) $command->option('verbose');
+        $days      = (int)$command->option('days');
+        $verbose   = (bool)$command->option('verbose');
         $files     = $this->public->listContents($this->getDestination(), true);
         $timestamp = time() - $days * 86400;
 
@@ -792,6 +618,197 @@ class Assets
                 $command->info('Keeping: ' . $file['path']);
             }
         }
+    }
+
+    /**
+     * Render markup to load the CSS or JS assets.
+     *
+     * @param string[]          $attributes    Optional attributes, such as ['async']
+     * @param string[]          $assets        The files to be processed
+     * @param string            $extension     ".css" or ".js"
+     * @param string            $source_dir    The folder containing the source assets
+     * @param FilterInterface[] $filters       How to process these assets
+     * @param string            $format_link   Template for an HTML link to the asset
+     * @param string            $format_inline Template for an inline asset
+     *
+     * @return string
+     * @throws FileNotFoundException
+     * @throws FileExistsException
+     */
+    private function processAssets(
+        array $attributes,
+        array $assets,
+        $extension,
+        $source_dir,
+        $filters,
+        $format_link,
+        $format_inline
+    ) {
+        $hashes = [];
+        $path   = $this->getDestination();
+
+        foreach ($assets as $asset) {
+            if ($this->isAbsoluteUrl($asset)) {
+                $hash = $this->hash($asset);
+            } else {
+                $hash = $this->hash($asset . $this->public->getTimestamp($source_dir . '/' . $asset));
+            }
+            if (!$this->public->has($path . '/' . $hash . $extension)) {
+                if ($this->isAbsoluteUrl($asset)) {
+                    $data = $this->getLoader()->loadUrl($asset);
+                } else {
+                    $data = $this->public->read($source_dir . '/' . $asset);
+                }
+                foreach ($filters as $filter) {
+                    $data = $filter->filter($data, $asset, $this);
+                }
+                $this->public->write($path . '/' . $hash . $extension, $data);
+                $this->public->write($path . '/' . $hash . '.min' . $extension, $data);
+            }
+            $hashes[] = $hash;
+        }
+
+        // The file name of our pipelined asset.
+        $hash       = $this->hash(implode('', $hashes));
+        $asset_file = $path . '/' . $hash . '.min' . $extension;
+
+        $this->concatenateFiles($path, $hashes, $hash, $extension);
+        $this->concatenateFiles($path, $hashes, $hash, '.min' . $extension);
+
+        $this->createGzip($asset_file);
+
+        foreach ($this->notifiers as $notifier) {
+            $notifier->created($asset_file);
+        }
+
+        if ($this->getDestinationUrl() === '') {
+            $url = url($path);
+        } else {
+            $url = $this->getDestinationUrl();
+        }
+
+        if ($this->isEnabled()) {
+            $inline_threshold = $this->getInlineThreshold();
+            if ($inline_threshold > 0 && $this->public->getSize($asset_file) <= $inline_threshold) {
+                return sprintf($format_inline, $this->public->read($asset_file));
+            }
+
+            return $this->htmlLinks($url, [$hash], '.min' . $extension, $format_link, $attributes);
+        }
+
+        return $this->htmlLinks($url, $hashes, $extension, $format_link, $attributes);
+    }
+
+    /**
+     * Make sure that the specified group (i.e. array key) exists.
+     *
+     * @param string $group
+     */
+    private function checkGroupExists($group)
+    {
+        if (!array_key_exists($group, $this->css_assets)) {
+            $this->css_assets[$group] = [];
+        }
+        if (!array_key_exists($group, $this->js_assets)) {
+            $this->js_assets[$group] = [];
+        }
+    }
+
+    /**
+     * Concatenate a number of files.
+     *
+     * @param string   $path        subfolder containing assets to be combined
+     * @param string[] $sources     Filenames (without extension) to be combined
+     * @param string   $destination Filename (without extension) to be created
+     * @param string   $extension   ".css", ".min.js", etc.
+     *
+     * @throws FileNotFoundException
+     * @throws FileExistsException
+     */
+    private function concatenateFiles($path, $sources, $destination, $extension)
+    {
+        if (!$this->public->has($path . '/' . $destination . $extension)) {
+            $data = '';
+            foreach ($sources as $source) {
+                $data .= $this->public->read($path . '/' . $source . $extension);
+            }
+            $this->public->write($path . '/' . $destination . $extension, $data);
+        }
+    }
+
+    /**
+     * Generate a hash, to use as a filename for generated assets.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    private function hash($text)
+    {
+        return md5($text);
+    }
+
+    /**
+     * Optionally create a .gz version of a file - to support the NGINX gzip_static option.
+     *
+     * @param string $path
+     *
+     * @throws FileNotFoundException
+     * @throws FileExistsException
+     */
+    private function createGzip($path)
+    {
+        $gzip = $this->getGzipStatic();
+
+        if ($gzip >= 1 && $gzip <= 9 && function_exists('gzcompress') && !$this->public->has($path . '.gz')) {
+            $content    = $this->public->read($path);
+            $content_gz = gzcompress($content, $gzip);
+            $this->public->write($path . '.gz', $content_gz);
+        }
+    }
+
+    /**
+     * Generate HTML links to a list of processed asset files.
+     *
+     * @param string   $url       path to the assets
+     * @param string[] $hashes    base filename
+     * @param string   $extension ".css", ".min.js", etc.
+     * @param string   $format
+     * @param string[] $attributes
+     *
+     * @return string
+     */
+    private function htmlLinks($url, $hashes, $extension, $format, $attributes)
+    {
+        $html_attributes = $this->convertAttributesToHtml($attributes);
+
+        $html_links = '';
+        foreach ($hashes as $asset) {
+            $html_links .= sprintf($format, $html_attributes, $url . '/' . $asset . $extension);
+        }
+
+        return $html_links;
+    }
+
+    /**
+     * Convert an array of attributes to HTML.
+     *
+     * @param string[] $attributes
+     *
+     * @return string
+     */
+    private function convertAttributesToHtml(array $attributes)
+    {
+        $html = '';
+        foreach ($attributes as $key => $value) {
+            if (is_int($key)) {
+                $html .= ' ' . $value;
+            } else {
+                $html .= ' ' . $key . '="' . $value . '"';
+            }
+        }
+
+        return $html;
     }
 
     /**

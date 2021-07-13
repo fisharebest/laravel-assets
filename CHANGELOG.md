@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 2.1.0 (2021-07-14)
+ - Add support for PHP 8.0
+
 ## 2.0.0 (2018-12-06)
  - Update to latest version of CSS minifier
  - Add PHP 7.2, 7.3, 7.4 to the test matrix

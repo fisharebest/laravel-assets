@@ -2,7 +2,7 @@
 /**
  * laravel-assets: asset management for Laravel 5
  *
- * Copyright (c) 2017 Greg Roach
+ * Copyright (c) 2021 Greg Roach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,48 +15,53 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 namespace Fisharebest\LaravelAssets\Tests;
 
 use Fisharebest\LaravelAssets\Filters\MinifyCss;
 
 /**
- * @author    Greg Roach <fisharebest@gmail.com>
- * @copyright (c) 2017 Greg Roach
- * @license   GPLv3+
+ * @author        Greg Roach <fisharebest@gmail.com>
+ * @copyright (c) 2021 Greg Roach
+ * @license       GPLv3+
  */
-class MinifyCssTest extends TestCase {
-	/**
-	 * Test the filter MinifyCss
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyCss::filter
-	 */
-	public function testFilter() {
-		$assets = $this->createDefaultAssets();
-		$filter = new MinifyCss;
+class MinifyCssTest extends TestCase
+{
+    /**
+     * Test the filter MinifyCss
+     *
+     * @covers \Fisharebest\LaravelAssets\Filters\MinifyCss::filter
+     */
+    public function testFilter()
+    {
+        $assets = $this->createDefaultAssets();
+        $filter = new MinifyCss;
 
-		$this->assertSame('body{border:0}', $filter->filter("body {\n\tborder: 0px;\n}\n", 'test.css', $assets));
-	}
+        $this->assertSame('body{border:0}', $filter->filter("body {\n\tborder: 0px;\n}\n", 'test.css', $assets));
+    }
 
-	/**
-	 * Test the filter MinifyCss
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Filters\MinifyCss::filter
-	 */
-	public function testAlreadyMinified() {
-		$assets = $this->createDefaultAssets();
-		$filter = new MinifyCss;
+    /**
+     * Test the filter MinifyCss
+     *
+     * @covers \Fisharebest\LaravelAssets\Filters\MinifyCss::filter
+     */
+    public function testAlreadyMinified()
+    {
+        $assets = $this->createDefaultAssets();
+        $filter = new MinifyCss;
 
-		$this->assertSame("body {\n\tborder: 0px;\n}\n", $filter->filter("body {\n\tborder: 0px;\n}\n", 'test.min.css', $assets));
-	}
+        $this->assertSame("body {\n\tborder: 0px;\n}\n", $filter->filter("body {\n\tborder: 0px;\n}\n", 'test.min.css', $assets));
+    }
 
-	/**
-	 * Test the object can be serialized and unserialized.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
-	 */
-	public function testIsSerializable() {
-		$this->assertInstanceOf(MinifyCss::class, MinifyCss::__set_state());
-	}
+    /**
+     * Test the object can be serialized and unserialized.
+     *
+     * @covers \Fisharebest\LaravelAssets\SetStateTrait::__set_state
+     */
+    public function testIsSerializable()
+    {
+        $this->assertInstanceOf(MinifyCss::class, MinifyCss::__set_state([]));
+    }
 }

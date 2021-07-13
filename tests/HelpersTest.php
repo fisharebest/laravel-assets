@@ -2,7 +2,7 @@
 /**
  * laravel-assets: asset management for Laravel 5
  *
- * Copyright (c) 2017 Greg Roach
+ * Copyright (c) 2021 Greg Roach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,66 +15,71 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 namespace Fisharebest\LaravelAssets\Tests;
 
 /**
- * @author    Greg Roach <fisharebest@gmail.com>
- * @copyright (c) 2017 Greg Roach
- * @license   GPLv3+
+ * @author        Greg Roach <greg@subaqua.co.uk>
+ * @copyright (c) 2021 Greg Roach
+ * @license       GPLv3+
  */
-class HelpersTest extends TestCase {
+class HelpersTest extends TestCase
+{
 
-	/**
-	 * Test isAbsoluteUrl() helper.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::isAbsoluteUrl
-	 */
-	public function testIsAbsoluteUrl() {
-		$assets = $this->createDefaultAssets();
+    /**
+     * Test isAbsoluteUrl() helper.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::isAbsoluteUrl
+     */
+    public function testIsAbsoluteUrl()
+    {
+        $assets = $this->createDefaultAssets();
 
-		$this->assertTrue($assets->isAbsoluteUrl('http://example.com'));
-		$this->assertTrue($assets->isAbsoluteUrl('https://example.com'));
-		$this->assertTrue($assets->isAbsoluteUrl('//example.com'));
-		$this->assertTrue($assets->isAbsoluteUrl('data:some-encoded-data'));
-		$this->assertFalse($assets->isAbsoluteUrl('unknown://example.com'));
-		$this->assertFalse($assets->isAbsoluteUrl('http:/example.com'));
-		$this->assertFalse($assets->isAbsoluteUrl('http/example.com'));
-		$this->assertFalse($assets->isAbsoluteUrl('/http/example'));
-	}
+        $this->assertTrue($assets->isAbsoluteUrl('http://example.com'));
+        $this->assertTrue($assets->isAbsoluteUrl('https://example.com'));
+        $this->assertTrue($assets->isAbsoluteUrl('//example.com'));
+        $this->assertTrue($assets->isAbsoluteUrl('data:some-encoded-data'));
+        $this->assertFalse($assets->isAbsoluteUrl('unknown://example.com'));
+        $this->assertFalse($assets->isAbsoluteUrl('http:/example.com'));
+        $this->assertFalse($assets->isAbsoluteUrl('http/example.com'));
+        $this->assertFalse($assets->isAbsoluteUrl('/http/example'));
+    }
 
-	/**
-	 * Test normalizePath() helper.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::normalizePath
-	 */
-	public function testNormalizePath() {
-		$assets = $this->createDefaultAssets();
+    /**
+     * Test normalizePath() helper.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::normalizePath
+     */
+    public function testNormalizePath()
+    {
+        $assets = $this->createDefaultAssets();
 
-		$this->assertSame('', $assets->normalizePath(''));
-		$this->assertSame('a', $assets->normalizePath('a'));
-		$this->assertSame('a/b/c', $assets->normalizePath('a/b/c'));
-		$this->assertSame('/a/b/c/', $assets->normalizePath('/a/b/c/'));
-		$this->assertSame('a/b/d', $assets->normalizePath('a/b/c/../d'));
-		$this->assertSame('a/d/e', $assets->normalizePath('a/b/c/../../d/e'));
-		$this->assertSame('d/e', $assets->normalizePath('a/../b/../c/../d/e'));
-		$this->assertSame('a/b', $assets->normalizePath('a/./b'));
-		$this->assertSame('a/d', $assets->normalizePath('a/b/./c/../../d'));
-		$this->assertSame('a/.../b', $assets->normalizePath('a/.../b'));
-	}
+        $this->assertSame('', $assets->normalizePath(''));
+        $this->assertSame('a', $assets->normalizePath('a'));
+        $this->assertSame('a/b/c', $assets->normalizePath('a/b/c'));
+        $this->assertSame('/a/b/c/', $assets->normalizePath('/a/b/c/'));
+        $this->assertSame('a/b/d', $assets->normalizePath('a/b/c/../d'));
+        $this->assertSame('a/d/e', $assets->normalizePath('a/b/c/../../d/e'));
+        $this->assertSame('d/e', $assets->normalizePath('a/../b/../c/../d/e'));
+        $this->assertSame('a/b', $assets->normalizePath('a/./b'));
+        $this->assertSame('a/d', $assets->normalizePath('a/b/./c/../../d'));
+        $this->assertSame('a/.../b', $assets->normalizePath('a/.../b'));
+    }
 
-	/**
-	 * Test relativePath() helper.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::relativePath
-	 */
-	public function testRelativePath() {
-		$assets = $this->createDefaultAssets();
+    /**
+     * Test relativePath() helper.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::relativePath
+     */
+    public function testRelativePath()
+    {
+        $assets = $this->createDefaultAssets();
 
-		$this->assertSame('../bar', $assets->relativePath('foo', 'bar'));
-		$this->assertSame('bar', $assets->relativePath('', 'bar'));
-		$this->assertSame('../', $assets->relativePath('foo', ''));
-		$this->assertSame('bar', $assets->relativePath('foo', 'foo/bar'));
-	}
+        $this->assertSame('../bar', $assets->relativePath('foo', 'bar'));
+        $this->assertSame('bar', $assets->relativePath('', 'bar'));
+        $this->assertSame('../', $assets->relativePath('foo', ''));
+        $this->assertSame('bar', $assets->relativePath('foo', 'foo/bar'));
+    }
 }

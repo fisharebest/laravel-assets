@@ -2,7 +2,7 @@
 /**
  * laravel-assets: asset management for Laravel 5
  *
- * Copyright (c) 2017 Greg Roach
+ * Copyright (c) 2021 Greg Roach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,102 +15,128 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 namespace Fisharebest\LaravelAssets\Tests;
 
 use Fisharebest\LaravelAssets\Assets;
 use Fisharebest\LaravelAssets\Commands\Purge;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
-use Mockery;
 
 /**
- * @author    Greg Roach <fisharebest@gmail.com>
- * @copyright (c) 2017 Greg Roach
- * @license   GPLv3+
+ * @author        Greg Roach <greg@subaqua.co.uk>
+ * @copyright (c) 2021 Greg Roach
+ * @license       GPLv3+
  */
-class PurgeTest extends TestCase {
-	/**
-	 * Test the purge command.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::purge
-	 */
-	public function testDeleteVerbose() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
-		$command    = Mockery::mock(Purge::class);
+class PurgeTest extends TestCase
+{
+    /**
+     * Test the purge command.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::purge
+     */
+    public function testDeleteVerbose()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem->write('min/foo.js', '');
 
-		$filesystem->write('min/foo.js', '');
+        $assets = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$command->shouldReceive('option')->with('days')->andReturn(0);
-		$command->shouldReceive('option')->with('verbose')->andReturn(true);
-		$command->shouldReceive('info')->with('Deleted: min/foo.js');
+        $command = $this->createMock(Purge::class);
 
-		$assets->purge($command);
+        $command
+            ->expects($this->exactly(2))
+            ->method('option')
+            ->withConsecutive(['days'], ['verbose'])
+            ->willReturnOnConsecutiveCalls(0, true);
 
-		$this->assertFalse($filesystem->has('min/foo.js'));
-	}
+        $command
+            ->expects($this->once())
+            ->method('info')
+            ->with('Deleted: min/foo.js');
 
-	/**
-	 * Test the purge command.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::purge
-	 */
-	public function testDeleteSilent() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
-		$command    = Mockery::mock(Purge::class);
+        $assets->purge($command);
 
-		$filesystem->write('min/foo.js', '');
+        $this->assertFalse($filesystem->has('min/foo.js'));
+    }
 
-		$command->shouldReceive('option')->with('days')->andReturn(0);
-		$command->shouldReceive('option')->with('verbose')->andReturn(false);
-		$command->shouldReceive('info')->with('Deleted: min/foo.js');
+    /**
+     * Test the purge command.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::purge
+     */
+    public function testDeleteSilent()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem->write('min/foo.js', '');
 
-		$assets->purge($command);
+        $assets = new Assets($this->defaultConfiguration(), $filesystem);
 
-		$this->assertFalse($filesystem->has('min/foo.js'));
-	}
+        $command = $this->createMock(Purge::class);
 
-	/**
-	 * Test the purge command.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::purge
-	 */
-	public function testRetainVerbose() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
-		$command    = Mockery::mock(Purge::class);
+        $command
+            ->expects($this->exactly(2))
+            ->method('option')
+            ->withConsecutive(['days'], ['verbose'])
+            ->willReturnOnConsecutiveCalls(0, false);
 
-		$filesystem->write('min/foo.js', '');
+        $assets->purge($command);
 
-		$command->shouldReceive('option')->with('days')->andReturn(1);
-		$command->shouldReceive('option')->with('verbose')->andReturn(true);
-		$command->shouldReceive('info')->with('Keeping: min/foo.js');
+        $this->assertFalse($filesystem->has('min/foo.js'));
+    }
 
-		$assets->purge($command);
+    /**
+     * Test the purge command.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::purge
+     */
+    public function testRetainVerbose()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem->write('min/foo.js', '');
 
-		$this->assertTrue($filesystem->has('min/foo.js'));
-	}
+        $assets = new Assets($this->defaultConfiguration(), $filesystem);
 
-	/**
-	 * Test the purge command.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\Assets::purge
-	 */
-	public function testRetainSilent() {
-		$filesystem = new Filesystem(new MemoryAdapter);
-		$assets     = new Assets($this->defaultConfiguration(), $filesystem);
-		$command    = Mockery::mock(Purge::class);
+        $command = $this->createMock(Purge::class);
+        $command
+            ->expects($this->exactly(2))
+            ->method('option')
+            ->withConsecutive(['days'], ['verbose'])
+            ->willReturnOnConsecutiveCalls(1, true);
+        $command
+            ->expects($this->once())
+            ->method('info')
+            ->with('Keeping: min/foo.js');
 
-		$filesystem->write('min/foo.js', '');
+        $assets->purge($command);
 
-		$command->shouldReceive('option')->with('days')->andReturn(1);
-		$command->shouldReceive('option')->with('verbose')->andReturn(false);
+        $this->assertTrue($filesystem->has('min/foo.js'));
+    }
 
-		$assets->purge($command);
+    /**
+     * Test the purge command.
+     *
+     * @covers \Fisharebest\LaravelAssets\Assets::purge
+     */
+    public function testRetainSilent()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem->write('min/foo.js', '');
 
-		$this->assertTrue($filesystem->has('min/foo.js'));
-	}
+        $assets = new Assets($this->defaultConfiguration(), $filesystem);
+
+        $command = $this->createMock(Purge::class);
+
+        $command
+            ->expects($this->exactly(2))
+            ->method('option')
+            ->withConsecutive(['days'], ['verbose'])
+            ->willReturnOnConsecutiveCalls(1, false);
+
+        $assets->purge($command);
+
+        $this->assertTrue($filesystem->has('min/foo.js'));
+    }
 }

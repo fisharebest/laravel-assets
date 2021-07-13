@@ -2,7 +2,7 @@
 /**
  * laravel-assets: asset management for Laravel 5
  *
- * Copyright (c) 2017 Greg Roach
+ * Copyright (c) 2021 Greg Roach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,60 +15,96 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 namespace Fisharebest\LaravelAssets\Tests;
 
 use Fisharebest\LaravelAssets\AssetsServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
-use Mockery;
+
+use stdClass;
+
+use function strtr;
 
 /**
- * @author    Greg Roach <fisharebest@gmail.com>
- * @copyright (c) 2017 Greg Roach
- * @license   GPLv3+
+ * @author        Greg Roach <greg@subaqua.co.uk>
+ * @copyright (c) 2021 Greg Roach
+ * @license       GPLv3+
  */
-class AssetsServiceProviderTest extends TestCase {
-	/**
-	 * Test booting the service provider.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\AssetsServiceProvider
-	 */
-	public function testBoot() {
-		$app = Mockery::mock(Application::class);
-		$service_provider = Mockery::mock(AssetsServiceProvider::class . '[publishes]', [$app])
-			->shouldAllowMockingProtectedMethods();
+class AssetsServiceProviderTest extends TestCase
+{
+    /**
+     * Test booting the service provider.
+     *
+     * @covers \Fisharebest\LaravelAssets\AssetsServiceProvider
+     */
+    public function testBoot()
+    {
+        $app              = $this->createMock(Application::class);
+        $service_provider = new AssetsServiceProvider($app);
 
-		$service_provider
-			->shouldReceive('publishes')
-			->with([dirname(__DIR__) . '/src/../config/assets.php' => 'assets.php']);
+        $service_provider->boot();
 
-		$service_provider->boot();
-	}
+        $publishes = [
+            strtr(__DIR__, ['/tests' => '/src']) . '/../config/assets.php' => 'assets.php',
+        ];
 
-	/**
-	 * Test registering the service provider.
-	 *
-	 * @covers \Fisharebest\LaravelAssets\AssetsServiceProvider
-	 */
-	public function testRegister() {
-		$app = Mockery::mock(Application::class);
-		$service_provider = Mockery::mock(AssetsServiceProvider::class . '[mergeConfigFrom,commands]', [$app])
-			->shouldAllowMockingProtectedMethods();
+        $this->assertSame($publishes, $service_provider::pathsToPublish());
+    }
 
-		$app->shouldReceive('singleton');
-		$app->shouldReceive('share');
-		$app->shouldReceive('offsetGet');
-		$app->shouldReceive('bind');
-		$app->shouldReceive('make')->with('assets');
+    /**
+     * Test registering the service provider.
+     *
+     * @covers \Fisharebest\LaravelAssets\AssetsServiceProvider
+     */
+    public function testRegister()
+    {
+        // Note that the laravel Application object changes over time, so we need
+        // to mock calls made for all versions from 5.0 onwards.
 
-		$service_provider
-			->shouldReceive('mergeConfigFrom')
-			->with(dirname(__DIR__) . '/src/../config/assets.php', 'assets');
-		$service_provider
-			->shouldReceive('commands')
-			->with(['command.assets.purge']);
+        $config = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['get', 'set'])
+            ->getMock();
+        $config
+            ->method('get')
+            ->with('assets', [])
+            ->willReturn($this->defaultConfiguration());
+        $config
+            ->method('set')
+            ->with('assets', $this->defaultConfiguration())
+            ->willReturn($this->defaultConfiguration());
 
-		$service_provider->register();
-	}
+        $listener = $this->getMockBuilder(stdClass::class)
+            ->setMethods(['listen'])
+            ->getMock();
+        $listener->method('listen');
+
+        // The Laravel application object implements ArrayAccess, while the interface doesn't.
+        eval('interface MyApplication extends \Illuminate\Contracts\Foundation\Application, \ArrayAccess {}');
+
+        $app = $this->createMock('MyApplication');
+
+        $app
+            ->method('make')
+            ->with('config')
+            ->willReturn($config);
+
+        $app
+            ->expects($this->once())
+            ->method('singleton');
+
+        $map = [
+            ['config', $config],
+            ['events', $listener],
+        ];
+
+        $app
+            ->method('offsetGet')
+            ->willReturnMap($map);
+
+        $service_provider = new AssetsServiceProvider($app);
+
+        $service_provider->register();
+    }
 }
