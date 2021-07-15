@@ -379,7 +379,7 @@ class Assets
      */
     public function setEnabled($enabled)
     {
-        $this->enabled = (bool)$enabled;
+        $this->enabled = (bool) $enabled;
 
         return $this;
     }
@@ -399,7 +399,7 @@ class Assets
      */
     public function setInlineThreshold($inline_threshold)
     {
-        $this->inline_threshold = (int)$inline_threshold;
+        $this->inline_threshold = (int) $inline_threshold;
 
         return $this;
     }
@@ -419,7 +419,7 @@ class Assets
      */
     public function setGzipStatic($gzip_static)
     {
-        $this->gzip_static = (int)$gzip_static;
+        $this->gzip_static = (int) $gzip_static;
 
         return $this;
     }
@@ -605,8 +605,8 @@ class Assets
      */
     public function purge(Purge $command)
     {
-        $days      = (int)$command->option('days');
-        $verbose   = (bool)$command->option('verbose');
+        $days      = (int) $command->option('days');
+        $verbose   = (bool) $command->option('verbose');
         $files     = $this->public->listContents($this->getDestination(), true);
         $timestamp = time() - $days * 86400;
 
