@@ -10,7 +10,7 @@
 		"minify",
 		"pipeline"
 	],
-	"license": "GPL-3.0",
+	"license": "GPL-3.0-or-later",
 	"authors": [
 		{
 			"name": "Greg Roach",
@@ -27,7 +27,7 @@
 	},
 	"require-dev": {
 		"league/flysystem-memory": "~1.0",
-		"phpunit/phpunit": "~5.7 | ~6.5 | ~7.5 | ~8.5 | ~9.5",
+		"phpunit/phpunit": "5.7.27 | 6.5.14 | 7.5.20 | ~8.5 | ~9.5",
 		"php-coveralls/php-coveralls": "~2.4"
 	},
 	"autoload": {
