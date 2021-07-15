@@ -1,12 +1,11 @@
 [![Latest Stable Version](https://poser.pugx.org/fisharebest/laravel-assets/v/stable.svg)](https://packagist.org/packages/fisharebest/laravel-assets)
-[![Build Status](https://travis-ci.org/fisharebest/laravel-assets.svg?branch=master)](https://travis-ci.org/fisharebest/laravel-assets)
+![Unit tests](https://github.com/fisharebest/laravel-assets/actions/workflows/phpunit.yaml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/fisharebest/laravel-assets/badge.svg?branch=master&service=github)](https://coveralls.io/github/fisharebest/laravel-assets?branch=master)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/84c48b77-7330-4e2a-b66d-f981b41a76a7/mini.png)](https://insight.sensiolabs.com/projects/84c48b77-7330-4e2a-b66d-f981b41a76a7)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fisharebest/laravel-assets/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fisharebest/laravel-assets/?branch=master)
-
+[![SymfonyInsight](https://insight.symfony.com/projects/61f10688-76cf-46e6-bf74-2d709f08e44b/mini.svg)](https://insight.symfony.com/projects/61f10688-76cf-46e6-bf74-2d709f08e44b)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fisharebest/laravel-assets/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/fisharebest/laravel-assets/?branch=main)
 # laravel-assets
 
-Simple, flexible asset management for Laravel 5.  Combine and minify your CSS and JS files to make your website faster.
+Simple, flexible asset management for Laravel 5 - 8.  Combine and minify your CSS and JS files to make your website faster.
 
 ## Installation
 
