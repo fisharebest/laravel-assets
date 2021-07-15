@@ -1,8 +1,9 @@
 CHANGELOG
 =========
 
-## 2.1.0 (2021-07-14)
+## 2.1.0 (2021-07-15)
  - Add support for PHP 8.0
+ - Replace travis-ci with github actions
 
 ## 2.0.0 (2018-12-06)
  - Update to latest version of CSS minifier
